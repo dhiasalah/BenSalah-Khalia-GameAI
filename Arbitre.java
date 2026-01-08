@@ -168,8 +168,7 @@ public class Arbitre {
                 int distributionColor = isTransparent ? transparentAs : colorIdx;
                 
                 for (int i = 0; i < seeds; i++) {
-                    current = (current % 16) + 1;
-                    if (current == hole) current = (current % 16) + 1; // Skip source
+                    current = (current % 16) + 1; // Move to next hole (no source skipping)
                     
                     if (distributionColor == 0) {
                         // Rouge: va dans tous les trous
@@ -206,21 +205,27 @@ public class Arbitre {
             int opponent = 3 - player;
             int current = lastHole;
             
-            while (true) {
+            // La capture commence UNIQUEMENT si le dernier trou semé est dans les trous adverses
+            if (!belongsToPlayer(lastHole, opponent)) {
+                return; // Pas de capture si le dernier trou n'est pas chez l'adversaire
+            }
+            
+            // Remonte en arrière en sens anti-horaire, uniquement dans les trous de l'adversaire
+            while (belongsToPlayer(current, opponent)) {
                 int total = holes[current][0] + holes[current][1] + holes[current][2];
                 
-                // Capturer si 2 ou 3 graines et trou adversaire
-                if ((total == 2 || total == 3) && belongsToPlayer(current, opponent)) {
+                // Capturer si 2 ou 3 graines
+                if (total == 2 || total == 3) {
                     capturedSeeds[player] += total;
                     holes[current][0] = 0;
                     holes[current][1] = 0;
                     holes[current][2] = 0;
                     
-                    // Continuer en arrière
-                    current = (current - 2 + 16) % 16 + 1;
-                    if (current == 0) current = 16;
+                    // Continuer en arrière (sens anti-horaire)
+                    current = current - 1;
+                    if (current < 1) current = 16;
                 } else {
-                    break;
+                    break; // S'arrête dès qu'un trou n'a pas 2-3 graines
                 }
             }
         }
@@ -257,6 +262,11 @@ public class Arbitre {
         }
         
         int getWinner() {
+            // Si un joueur a 49+, il gagne
+            if (capturedSeeds[1] >= 49) return 1;
+            if (capturedSeeds[2] >= 49) return 2;
+            
+            // Sinon, compare les scores
             if (capturedSeeds[1] > capturedSeeds[2]) return 1;
             if (capturedSeeds[2] > capturedSeeds[1]) return 2;
             return 0; // Draw
