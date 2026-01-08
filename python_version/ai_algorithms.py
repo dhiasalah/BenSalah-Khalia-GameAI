@@ -239,6 +239,106 @@ class MinMaxBot:
         return move
 
 
+class AlphaBetaBot:
+    """Algorithme Alpha-Beta Pruning - Version optimisée de MinMax"""
+
+    def __init__(self, depth: int = 5):
+        self.depth = depth
+        self.evaluator = Evaluator()
+        self.nodes_explored = 0
+        self.pruned_branches = 0
+
+    def search(self, state: GameState, player: int, depth: int = 0,
+               alpha: float = float('-inf'), beta: float = float('inf'),
+               is_maximizing: bool = True) -> Tuple[float, Optional[Tuple[int, Color, Color]]]:
+        """
+        Alpha-Beta Pruning - Élagage des branches non prometteuses
+
+        Alpha: Meilleure valeur pour le joueur maximisant
+        Beta: Meilleure valeur pour le joueur minimisant
+        """
+        self.nodes_explored += 1
+
+        # État terminal
+        if self.evaluator.is_terminal(state):
+            terminal_score = self.evaluator.get_terminal_score(state, player)
+            return terminal_score, None
+
+        # Profondeur atteinte
+        if depth >= self.depth:
+            return self.evaluator.evaluate(state, player), None
+
+        current_player = state.current_player
+
+        if is_maximizing:
+            # Nœud maximisant (notre joueur)
+            max_eval = float('-inf')
+            best_move = None
+
+            moves = MoveGenerator.get_all_moves(state, current_player)
+
+            for hole, color, transparent_as in moves:
+                new_state = MoveGenerator.apply_move(state, hole, color, transparent_as)
+
+                # Déterminer si le prochain niveau est maximisant ou minimisant
+                next_is_maximizing = (new_state.current_player == player)
+
+                eval_score, _ = self.search(new_state, player, depth + 1, alpha, beta, next_is_maximizing)
+
+                if eval_score > max_eval:
+                    max_eval = eval_score
+                    best_move = (hole, color, transparent_as)
+
+                # Mise à jour d'alpha
+                alpha = max(alpha, eval_score)
+
+                # Élagage Beta
+                if beta <= alpha:
+                    self.pruned_branches += 1
+                    break  # Beta cutoff - on peut arrêter d'explorer cette branche
+
+            return max_eval, best_move
+        else:
+            # Nœud minimisant (adversaire)
+            min_eval = float('inf')
+            best_move = None
+
+            moves = MoveGenerator.get_all_moves(state, current_player)
+
+            for hole, color, transparent_as in moves:
+                new_state = MoveGenerator.apply_move(state, hole, color, transparent_as)
+
+                # Déterminer si le prochain niveau est maximisant ou minimisant
+                next_is_maximizing = (new_state.current_player == player)
+
+                eval_score, _ = self.search(new_state, player, depth + 1, alpha, beta, next_is_maximizing)
+
+                if eval_score < min_eval:
+                    min_eval = eval_score
+                    best_move = (hole, color, transparent_as)
+
+                # Mise à jour de beta
+                beta = min(beta, eval_score)
+
+                # Élagage Alpha
+                if beta <= alpha:
+                    self.pruned_branches += 1
+                    break  # Alpha cutoff - on peut arrêter d'explorer cette branche
+
+            return min_eval, best_move
+
+    def get_move(self, state: GameState, player: int) -> Optional[Tuple[int, Color, Color]]:
+        """Interface publique pour obtenir un coup"""
+        self.nodes_explored = 0
+        self.pruned_branches = 0
+
+        _, move = self.search(state, player, 0, float('-inf'), float('inf'), True)
+
+        # print(f"[Alpha-Beta] Nœuds explorés: {self.nodes_explored}, Branches élaguées: {self.pruned_branches}")
+
+        return move
+
+
 class IterativeDeepeningDFSBot:
     """Algorithme Iterative Deepening DFS"""
 
@@ -303,7 +403,7 @@ class IterativeDeepeningDFSBot:
 
             if move is not None:
                 best_move = move
-                print(f"[ID-DFS] Profondeur {depth}: {self.nodes_explored} nœuds explorés")
+                # print(f"[ID-DFS] Profondeur {depth}: {self.nodes_explored} nœuds explorés")
 
         return best_move
 

@@ -27,7 +27,7 @@ SHOW_BOARD_STATE = False
 # ==================== TIMING ====================
 
 # Temps maximum par coup (en secondes) - à adapter selon la plateforme
-MAX_TIME_PER_MOVE = 1.0
+MAX_TIME_PER_MOVE = 3.0
 
 # ==================== STRATÉGIE ====================
 

@@ -1,0 +1,771 @@
+Received: 'START'
+Player 2 waits for Player 1's first move
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=3 B=2 T=2
+  Hole 4: R=2 B=2 T=2
+  Hole 6: R=2 B=2 T=2
+  Hole 8: R=2 B=2 T=2
+  Hole 10: R=2 B=2 T=2
+  Hole 12: R=2 B=2 T=2
+  Hole 14: R=2 B=2 T=2
+  Hole 16: R=2 B=2 T=2
+Chosen move: 4R
+Received: '7R'
+Getting move. Holes for player 2:
+  Hole 2: R=3 B=2 T=2
+  Hole 4: R=0 B=2 T=2
+  Hole 6: R=3 B=2 T=2
+  Hole 8: R=3 B=2 T=2
+  Hole 10: R=2 B=2 T=2
+  Hole 12: R=2 B=2 T=2
+  Hole 14: R=2 B=2 T=2
+  Hole 16: R=2 B=2 T=2
+Chosen move: 10R
+Received: '15R'
+Getting move. Holes for player 2:
+  Hole 2: R=3 B=2 T=2
+  Hole 4: R=0 B=2 T=2
+  Hole 6: R=3 B=2 T=2
+  Hole 8: R=3 B=2 T=2
+  Hole 10: R=0 B=2 T=2
+  Hole 12: R=3 B=2 T=2
+  Hole 14: R=2 B=2 T=2
+  Hole 16: R=3 B=2 T=2
+Chosen move: 2R
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=1 B=2 T=2
+  Hole 6: R=3 B=2 T=2
+  Hole 8: R=3 B=2 T=2
+  Hole 10: R=0 B=2 T=2
+  Hole 12: R=3 B=2 T=2
+  Hole 14: R=3 B=2 T=2
+  Hole 16: R=3 B=2 T=2
+Chosen move: 4R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=2 T=2
+  Hole 4: R=0 B=2 T=2
+  Hole 6: R=3 B=2 T=2
+  Hole 8: R=3 B=2 T=2
+  Hole 10: R=0 B=2 T=2
+  Hole 12: R=3 B=2 T=2
+  Hole 14: R=3 B=2 T=2
+  Hole 16: R=3 B=2 T=2
+Chosen move: 2R
+Received: '3B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=0 B=3 T=2
+  Hole 6: R=3 B=3 T=2
+  Hole 8: R=3 B=2 T=2
+  Hole 10: R=0 B=2 T=2
+  Hole 12: R=3 B=2 T=2
+  Hole 14: R=3 B=2 T=2
+  Hole 16: R=3 B=2 T=2
+Chosen move: 8R
+Received: '5B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=0 B=3 T=2
+  Hole 6: R=3 B=4 T=2
+  Hole 8: R=0 B=3 T=2
+  Hole 10: R=1 B=2 T=2
+  Hole 12: R=3 B=2 T=2
+  Hole 14: R=3 B=2 T=2
+  Hole 16: R=3 B=2 T=2
+Chosen move: 10R
+Received: '15R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=0 B=3 T=2
+  Hole 6: R=3 B=4 T=2
+  Hole 8: R=0 B=3 T=2
+  Hole 10: R=0 B=2 T=2
+  Hole 12: R=3 B=2 T=2
+  Hole 14: R=3 B=2 T=2
+  Hole 16: R=4 B=2 T=2
+Chosen move: 6R
+Received: '7R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=0 B=3 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=2 B=3 T=2
+  Hole 10: R=0 B=2 T=2
+  Hole 12: R=3 B=2 T=2
+  Hole 14: R=3 B=2 T=2
+  Hole 16: R=4 B=2 T=2
+Chosen move: 8R
+Received: '7B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=0 B=3 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=1 B=3 T=2
+  Hole 12: R=3 B=2 T=2
+  Hole 14: R=3 B=2 T=2
+  Hole 16: R=4 B=2 T=2
+Chosen move: 12B
+Received: '9R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=0 B=3 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=2 B=3 T=2
+  Hole 12: R=4 B=0 T=2
+  Hole 14: R=4 B=2 T=2
+  Hole 16: R=4 B=2 T=2
+Chosen move: 10R
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=0 B=3 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=5 B=0 T=2
+  Hole 14: R=5 B=2 T=2
+  Hole 16: R=4 B=2 T=2
+Chosen move: 16R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=2 B=2 T=2
+  Hole 4: R=1 B=3 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=5 B=0 T=2
+  Hole 14: R=5 B=2 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 2R
+Received: '5R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=2 T=2
+  Hole 4: R=2 B=3 T=2
+  Hole 6: R=1 B=4 T=2
+  Hole 8: R=1 B=4 T=2
+  Hole 10: R=1 B=3 T=2
+  Hole 12: R=5 B=0 T=2
+  Hole 14: R=5 B=2 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 2B
+Received: '11R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=2 B=3 T=2
+  Hole 6: R=1 B=4 T=2
+  Hole 8: R=1 B=4 T=2
+  Hole 10: R=1 B=3 T=2
+  Hole 12: R=6 B=0 T=2
+  Hole 14: R=6 B=2 T=2
+  Hole 16: R=1 B=2 T=2
+Chosen move: 4R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=0 B=3 T=2
+  Hole 6: R=2 B=4 T=2
+  Hole 8: R=1 B=4 T=2
+  Hole 10: R=1 B=3 T=2
+  Hole 12: R=6 B=0 T=2
+  Hole 14: R=6 B=2 T=2
+  Hole 16: R=1 B=2 T=2
+Chosen move: 2R
+Received: '3B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=2 B=4 T=2
+  Hole 8: R=1 B=4 T=2
+  Hole 10: R=1 B=3 T=2
+  Hole 12: R=6 B=0 T=2
+  Hole 14: R=6 B=2 T=2
+  Hole 16: R=1 B=2 T=2
+Chosen move: 6R
+Received: '5R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=1 B=4 T=2
+  Hole 8: R=2 B=4 T=2
+  Hole 10: R=1 B=3 T=2
+  Hole 12: R=6 B=0 T=2
+  Hole 14: R=6 B=2 T=2
+  Hole 16: R=1 B=2 T=2
+Chosen move: 6R
+Received: '9R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=2 B=4 T=2
+  Hole 10: R=2 B=3 T=2
+  Hole 12: R=6 B=0 T=2
+  Hole 14: R=6 B=2 T=2
+  Hole 16: R=1 B=2 T=2
+Chosen move: 10R
+Received: '11R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=2 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=8 B=0 T=2
+  Hole 14: R=6 B=2 T=2
+  Hole 16: R=1 B=2 T=2
+Chosen move: 8R
+Received: '9R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=2 B=3 T=2
+  Hole 12: R=8 B=0 T=2
+  Hole 14: R=6 B=2 T=2
+  Hole 16: R=1 B=2 T=2
+Chosen move: 16R
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=2 B=3 T=2
+  Hole 12: R=8 B=0 T=2
+  Hole 14: R=7 B=2 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 10R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=9 B=0 T=2
+  Hole 14: R=7 B=2 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 2R
+Received: '11R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=2 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 14B
+Received: '15R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=0 T=2
+  Hole 16: R=1 B=2 T=2
+Chosen move: 16R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=0 B=4 T=2
+  Hole 6: R=0 B=4 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=0 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 2R
+Received: '1B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=1 T=0
+  Hole 4: R=0 B=5 T=2
+  Hole 6: R=0 B=5 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=0 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 2B
+Received: '3B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=6 T=2
+  Hole 6: R=0 B=5 T=2
+  Hole 8: R=0 B=4 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=0 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 6B
+Received: '7B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=6 T=2
+  Hole 6: R=0 B=0 T=2
+  Hole 8: R=0 B=5 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=0 T=2
+  Hole 16: R=0 B=2 T=2
+Chosen move: 8B
+Received: '13B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=1 T=0
+  Hole 4: R=0 B=7 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=1 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 2B
+Received: '3B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=1 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 14B
+Received: '7R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=1 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 8R
+Received: '9R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=2 B=3 T=2
+  Hole 12: R=10 B=0 T=2
+  Hole 14: R=7 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 10R
+Received: '11R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=3 T=2
+  Hole 12: R=12 B=0 T=2
+  Hole 14: R=7 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 10B
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=12 B=0 T=2
+  Hole 14: R=8 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 12R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=1 B=8 T=2
+  Hole 6: R=1 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=9 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 4R
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=1 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=10 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 16R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=1 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=10 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 2R
+Received: '13B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=1 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=10 B=1 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 6R
+Received: '7R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=2 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=10 B=1 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 8R
+Received: '9R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=2 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=10 B=1 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 10R
+Received: '11R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=2 B=0 T=2
+  Hole 14: R=10 B=1 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 12R
+Received: '15R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=11 B=1 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 14B
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=12 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 16R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=12 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 2R
+Received: '15R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=12 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 16R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=12 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 2R
+Received: '3R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=1 B=8 T=2
+  Hole 6: R=1 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=1 B=0 T=2
+  Hole 14: R=13 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 2R
+Received: '5R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=1 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=1 B=0 T=2
+  Hole 14: R=13 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 16R
+Received: '9R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=1 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=2 B=0 T=2
+  Hole 12: R=1 B=0 T=2
+  Hole 14: R=13 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 4R
+Received: '5R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=1 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=2 B=0 T=2
+  Hole 12: R=1 B=0 T=2
+  Hole 14: R=13 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 6R
+Received: '7R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=2 B=0 T=2
+  Hole 10: R=2 B=0 T=2
+  Hole 12: R=1 B=0 T=2
+  Hole 14: R=13 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 8R
+Received: '9R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=4 B=0 T=2
+  Hole 12: R=1 B=0 T=2
+  Hole 14: R=13 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 10R
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=2 B=0 T=2
+  Hole 14: R=15 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 14R
+Received: '5R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=1 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=3 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 2R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=1 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=3 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 2R
+Received: '3R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=2 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=3 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=1 B=3 T=2
+Chosen move: 16R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=1 B=0 T=0
+  Hole 4: R=2 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=3 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 2R
+Received: '3R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=3 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 12R
+Received: '9R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=2 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=1 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 10R
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=1 B=0 T=2
+  Hole 14: R=2 B=0 T=2
+  Hole 16: R=0 B=3 T=2
+Chosen move: 14R
+Received: '11R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=2 B=0 T=2
+  Hole 14: R=1 B=0 T=2
+  Hole 16: R=2 B=3 T=2
+Chosen move: 12R
+Received: '13R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=8 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=3 B=0 T=2
+  Hole 16: R=2 B=3 T=2
+Chosen move: 16B
+Received: '5B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=8 T=2
+  Hole 6: R=0 B=1 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=3 B=0 T=2
+  Hole 16: R=2 B=0 T=2
+Chosen move: 6B
+Received: '3B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=9 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=1 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=3 B=0 T=2
+  Hole 16: R=2 B=0 T=2
+Chosen move: 14R
+Received: '7R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=9 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=2 B=0 T=2
+  Hole 10: R=0 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=3 B=0 T=2
+Chosen move: 8R
+Received: '7B'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=3 B=9 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=0
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=3 B=0 T=2
+Chosen move: 4R
+Received: '5R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=9 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=0
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=3 B=0 T=2
+Chosen move: 16R
+Received: '1R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=9 T=2
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=0
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=0 B=0 T=2
+Chosen move: 4B
+Received: '3R'
+Getting move. Holes for player 2:
+  Hole 2: R=0 B=0 T=0
+  Hole 4: R=0 B=0 T=0
+  Hole 6: R=0 B=0 T=0
+  Hole 8: R=0 B=0 T=0
+  Hole 10: R=1 B=0 T=2
+  Hole 12: R=0 B=0 T=2
+  Hole 14: R=0 B=0 T=2
+  Hole 16: R=0 B=0 T=2

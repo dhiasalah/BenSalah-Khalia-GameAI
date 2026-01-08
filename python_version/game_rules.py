@@ -19,12 +19,15 @@ class Color(Enum):
 class GameState:
     """État du jeu"""
 
+    MAX_MOVES = 400  # Limite de 400 coups (200 par joueur)
+
     def __init__(self):
         # Dictionnaire des trous: {numéro: {couleur: nombre}}
         self.holes: Dict[int, Dict[Color, int]] = {}
         self.initialize_board()
         self.captured_seeds = {1: 0, 2: 0}  # Graines capturées par joueur
         self.current_player = 1
+        self.move_count = 0  # Compteur de coups joués
 
     def initialize_board(self):
         """Initialise le plateau avec 2 graines de chaque couleur par trou"""
@@ -60,7 +63,12 @@ class GameState:
         - Un joueur a capturé 49+ graines -> victoire
         - Les deux joueurs ont capturé 40+ graines -> égalité
         - Strictement moins de 10 graines restent sur le plateau -> fin
+        - 400 coups atteints -> fin (celui avec le plus de graines gagne)
         """
+        # Condition 0: Limite de 400 coups atteinte
+        if self.move_count >= self.MAX_MOVES:
+            return True
+
         seeds_on_board = self.get_seeds_on_board()
 
         # Condition 1: Moins de 10 graines sur le plateau
@@ -120,6 +128,7 @@ class GameState:
             new_state.holes[hole] = self.holes[hole].copy()
         new_state.captured_seeds = self.captured_seeds.copy()
         new_state.current_player = self.current_player
+        new_state.move_count = self.move_count
         return new_state
 
     def __str__(self) -> str:

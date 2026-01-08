@@ -10,69 +10,70 @@ def print_game_board(state: GameState):
     Affiche le plateau du jeu avec toutes les informations
     Format similaire à l'image fournie - CLAIR ET LISIBLE
     """
-    print("\n")
+    # print("\n")
 
-    # Affichage des scores
-    print(f"Score P1: {state.captured_seeds[1]:2d} | Score P2: {state.captured_seeds[2]:2d}")
+    # # Affichage des scores
+    # print(f"Score P1: {state.captured_seeds[1]:2d} | Score P2: {state.captured_seeds[2]:2d}")
 
-    # Ligne 1 : Trous 1-8
-    print("| ", end="")
-    for hole in range(1, 9):
-        print(f"Field:{hole}| ", end="")
-    print()
+    # # Ligne 1 : Trous 1-8
+    # print("| ", end="")
+    # for hole in range(1, 9):
+    #     print(f"Field:{hole}| ", end="")
+    # print()
 
-    # Ligne 2 : Graines ROUGES (trous 1-8)
-    print("| ", end="")
-    for hole in range(1, 9):
-        red_count = state.holes[hole][Color.RED]
-        print(f"RED:{red_count}  | ", end="")
-    print()
+    # # Ligne 2 : Graines ROUGES (trous 1-8)
+    # print("| ", end="")
+    # for hole in range(1, 9):
+    #     red_count = state.holes[hole][Color.RED]
+    #     print(f"RED:{red_count}  | ", end="")
+    # print()
 
-    # Ligne 3 : Graines BLEUES (trous 1-8)
-    print("| ", end="")
-    for hole in range(1, 9):
-        blue_count = state.holes[hole][Color.BLUE]
-        print(f"BLUE:{blue_count} | ", end="")
-    print()
+    # # Ligne 3 : Graines BLEUES (trous 1-8)
+    # print("| ", end="")
+    # for hole in range(1, 9):
+    #     blue_count = state.holes[hole][Color.BLUE]
+    #     print(f"BLUE:{blue_count} | ", end="")
+    # print()
 
-    # Ligne 4 : Graines TRANSPARENTES (trous 1-8)
-    print("| ", end="")
-    for hole in range(1, 9):
-        trans_count = state.holes[hole][Color.TRANSPARENT]
-        print(f"TRSP:{trans_count} | ", end="")
-    print()
+    # # Ligne 4 : Graines TRANSPARENTES (trous 1-8)
+    # print("| ", end="")
+    # for hole in range(1, 9):
+    #     trans_count = state.holes[hole][Color.TRANSPARENT]
+    #     print(f"TRSP:{trans_count} | ", end="")
+    # print()
 
-    # Ligne vide
-    print()
+    # # Ligne vide
+    # print()
 
-    # Ligne 5 : Trous 9-16
-    print("| ", end="")
-    for hole in range(9, 17):
-        print(f"Field:{hole}| ", end="")
-    print()
+    # # Ligne 5 : Trous 9-16
+    # print("| ", end="")
+    # for hole in range(9, 17):
+    #     print(f"Field:{hole}| ", end="")
+    #     print()
 
-    # Ligne 6 : Graines ROUGES (trous 9-16)
-    print("| ", end="")
-    for hole in range(9, 17):
-        red_count = state.holes[hole][Color.RED]
-        print(f"RED:{red_count}  | ", end="")
-    print()
+    # # Ligne 6 : Graines ROUGES (trous 9-16)
+    # print("| ", end="")
+    # for hole in range(9, 17):
+    #     red_count = state.holes[hole][Color.RED]
+    #     print(f"RED:{red_count}  | ", end="")
+    # print()
 
-    # Ligne 7 : Graines BLEUES (trous 9-16)
-    print("| ", end="")
-    for hole in range(9, 17):
-        blue_count = state.holes[hole][Color.BLUE]
-        print(f"BLUE:{blue_count} | ", end="")
-    print()
+    # # Ligne 7 : Graines BLEUES (trous 9-16)
+    # print("| ", end="")
+    # for hole in range(9, 17):
+    #     blue_count = state.holes[hole][Color.BLUE]
+    #     print(f"BLUE:{blue_count} | ", end="")
+    # print()
 
-    # Ligne 8 : Graines TRANSPARENTES (trous 9-16)
-    print("| ", end="")
-    for hole in range(9, 17):
-        trans_count = state.holes[hole][Color.TRANSPARENT]
-        print(f"TRSP:{trans_count} | ", end="")
-    print()
+    # # Ligne 8 : Graines TRANSPARENTES (trous 9-16)
+    # print("| ", end="")
+    # for hole in range(9, 17):
+    #     trans_count = state.holes[hole][Color.TRANSPARENT]
+    #     print(f"TRSP:{trans_count} | ", end="")
+    # print()
 
-    print()
+    # print()
+    pass
 
 def print_menu():
     """Affiche le menu principal"""
@@ -90,10 +91,11 @@ def print_ai_menu():
     print("\nSélectionnez l'IA:")
     print("1. BFS (Breadth-First Search) - Profondeur 2")
     print("2. DFS (Depth-First Search) - Profondeur 3")
-    print("3. Min-Max avec Alpha-Beta - Profondeur 4")
-    print("4. Iterative Deepening DFS - Profondeur 6")
+    print("3. Min-Max - Profondeur 4")
+    print("4. Alpha-Beta Pruning - Profondeur 5 (Recommandé)")
+    print("5. Iterative Deepening DFS - Profondeur 6")
 
-def get_ai_choice(prompt: str = "Choisissez une IA (1-4):") -> tuple:
+def get_ai_choice(prompt: str = "Choisissez une IA (1-5):") -> tuple:
     """Demande à l'utilisateur de choisir une IA"""
     print_ai_menu()
 
@@ -108,9 +110,11 @@ def get_ai_choice(prompt: str = "Choisissez une IA (1-4):") -> tuple:
             elif choice == 3:
                 return "minimax", {"depth": 4}
             elif choice == 4:
+                return "alphabeta", {"depth": 5}
+            elif choice == 5:
                 return "iddfs", {"depth": 6}
             else:
-                print("Choix invalide! Entrez 1, 2, 3 ou 4.")
+                print("Choix invalide! Entrez 1, 2, 3, 4 ou 5.")
         except ValueError:
             print("Veuillez entrer un nombre!")
 
@@ -148,13 +152,26 @@ def play_human_vs_ai():
         manager = GameManager(ai_type, ai_config, "human", {})
 
     print("\n" + "="*80)
-    print("DÉBUT DE LA PARTIE")
+    print("DÉBUT DE LA PARTIE - Seuls les coups seront affichés")
     print("="*80)
 
-    # Affichage du plateau initial
-    print_game_board(manager.state)
+    # Pas d'affichage du plateau initial
+    # print_game_board(manager.state)
 
     manager.play_game(verbose=True)
+
+    # Affichage du résultat
+    stats = manager.get_game_stats()
+    winner = manager.state.get_winner()
+
+    print("\n" + "="*80)
+    if winner == 0:
+        print(f"RÉSULTAT: ÉGALITÉ ({stats['player1_captured']} - {stats['player2_captured']})")
+    elif winner == human_player:
+        print(f"RÉSULTAT: VOUS AVEZ GAGNÉ! ({stats['player1_captured']} - {stats['player2_captured']})")
+    else:
+        print(f"RÉSULTAT: L'IA A GAGNÉ! ({stats['player1_captured']} - {stats['player2_captured']})")
+    print("="*80)
 
 def play_ai_vs_ai():
     """Lance une partie IA vs IA"""
@@ -172,18 +189,32 @@ def play_ai_vs_ai():
 
     print("\n" + "="*80)
     print(f"DÉBUT: {ai1_type.upper()} (J1) vs {ai2_type.upper()} (J2)")
+    print("Seuls les coups seront affichés")
     print("="*80)
 
-    # Affichage du plateau initial
-    print_game_board(manager.state)
+    # Pas d'affichage du plateau initial
+    # print_game_board(manager.state)
 
     manager.play_game(verbose=True)
 
-def play_tournament():
-    """Lance un tournoi entre les 4 IA"""
+    # Affichage du résultat
+    stats = manager.get_game_stats()
+    winner = manager.state.get_winner()
+
     print("\n" + "="*80)
-    print("TOURNOI - TOUS LES IA SE BATTENT")
+    if winner == 0:
+        print(f"RÉSULTAT: ÉGALITÉ ({stats['player1_captured']} - {stats['player2_captured']})")
+    elif winner == 1:
+        print(f"RÉSULTAT: {ai1_type.upper()} (J1) A GAGNÉ! ({stats['player1_captured']} - {stats['player2_captured']})")
+    else:
+        print(f"RÉSULTAT: {ai2_type.upper()} (J2) A GAGNÉ! ({stats['player1_captured']} - {stats['player2_captured']})")
     print("="*80)
+
+def play_tournament():
+    """Lance un tournoi entre les 5 IA"""
+    # print("\n" + "="*80)
+    # print("TOURNOI - TOUS LES IA SE BATTENT")
+    # print("="*80)
 
     tournament = Tournament()
 
@@ -191,19 +222,20 @@ def play_tournament():
         ("bfs", {"depth": 2}),
         ("dfs", {"depth": 3}),
         ("minimax", {"depth": 4}),
+        ("alphabeta", {"depth": 5}),
         ("iddfs", {"depth": 6})
     ]
 
-    ai_names = ["BFS", "DFS", "Min-Max", "ID-DFS"]
+    ai_names = ["BFS", "DFS", "Min-Max", "Alpha-Beta", "ID-DFS"]
 
-    print("\nOuverture du tournoi...")
+    # print("\nOuverture du tournoi...")
 
     match_count = 0
     for i, (ai1_type, ai1_config) in enumerate(ais):
         for j, (ai2_type, ai2_config) in enumerate(ais):
             if i < j:  # Évite les doublons
                 match_count += 1
-                print(f"\nMatch {match_count}: {ai_names[i]} vs {ai_names[j]}")
+                # print(f"\nMatch {match_count}: {ai_names[i]} vs {ai_names[j]}")
 
                 manager = GameManager(ai1_type, ai1_config, ai2_type, ai2_config)
                 manager.play_game(verbose=False)
