@@ -2,8 +2,8 @@
 Règles du jeu Mancala à 16 trous
 - 16 trous (8 par joueur)
 - Numérotés de 1 à 16, en sens horaire
-- Joueur 1: trous impairs (1,3,5,7,9,11,13,15)
-- Joueur 2: trous pairs (2,4,6,8,10,12,14,16)
+- Joueur 1: trous pairs (2,4,6,8,10,12,14,16)
+- Joueur 2: trous impairs (1,3,5,7,9,11,13,15)
 - Au départ: 2 graines rouges, 2 bleues, 2 transparentes par trou
 - Trois couleurs: Red (R), Blue (B), Transparent (T)
 """
@@ -40,11 +40,11 @@ class GameState:
 
     def get_player_holes(self, player: int) -> List[int]:
         """Retourne les trous contrôlés par un joueur
-        Joueur 1: trous impairs, Joueur 2: trous pairs"""
+        Joueur 1: trous pairs, Joueur 2: trous impairs"""
         if player == 1:
-            return [h for h in range(1, 17) if h % 2 == 1]
-        else:
             return [h for h in range(1, 17) if h % 2 == 0]
+        else:
+            return [h for h in range(1, 17) if h % 2 == 1]
 
     def get_total_seeds(self, hole: int) -> int:
         """Retourne le nombre total de graines dans un trou"""

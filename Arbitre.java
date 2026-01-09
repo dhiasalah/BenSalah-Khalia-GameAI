@@ -7,11 +7,11 @@ public class Arbitre {
     private static final int MAX_MOVES = 400;
 
     public static void main(String[] args) throws Exception {
-        // Process A: C++ bot with MinMax AI (Player 1 - odd holes)
-        Process A = Runtime.getRuntime().exec("c_version\\bot.exe 1");
+        // Process A: Python bot with MinMax AI (Player 1 - even holes)
+        Process A = Runtime.getRuntime().exec("python python_version\\bot.py 1");
         
-        // Process B: Python bot with MinMax AI (Player 2 - even holes)
-        Process B = Runtime.getRuntime().exec("python python_version\\bot.py 2");
+        // Process B: C++ bot with MinMax AI (Player 2 - odd holes)
+        Process B = Runtime.getRuntime().exec("c_version\\bot.exe 2");
 
         Joueur joueur1 = new Joueur("Player1", A, 1);
         Joueur joueur2 = new Joueur("Player2", B, 2);
@@ -30,7 +30,7 @@ public class Arbitre {
         int nbCoups = 0;
         
         System.out.println("=== DEBUT DE LA PARTIE ===");
-        System.out.println("Player1 (C++ MinMax) vs Player2 (Python MinMax)");
+        System.out.println("Player1 (Python MinMax) vs Player2 (C++ MinMax)");
         System.out.println();
 
         while (!game.isGameOver() && nbCoups < MAX_MOVES) {
@@ -84,9 +84,9 @@ public class Arbitre {
         
         int winner = game.getWinner();
         if (winner == 1) {
-            System.out.println("RESULT Player1 (C++) WINS!");
+            System.out.println("RESULT Player1 (Python) WINS!");
         } else if (winner == 2) {
-            System.out.println("RESULT Player2 (Python) WINS!");
+            System.out.println("RESULT Player2 (C++) WINS!");
         } else {
             System.out.println("RESULT DRAW!");
         }
@@ -229,9 +229,9 @@ public class Arbitre {
         
         boolean belongsToPlayer(int hole, int player) {
             if (player == 1) {
-                return hole % 2 == 1; // Impairs: 1,3,5,7,9,11,13,15
-            } else {
                 return hole % 2 == 0; // Pairs: 2,4,6,8,10,12,14,16
+            } else {
+                return hole % 2 == 1; // Impairs: 1,3,5,7,9,11,13,15
             }
         }
         

@@ -11,6 +11,7 @@ from game_engine import GameEngine, MoveGenerator
 from typing import List, Tuple, Dict, Optional
 from collections import deque
 import sys
+import time
 
 class Evaluator:
     """Évalue la qualité d'une position"""
@@ -168,17 +169,130 @@ class DFSBot:
 
 
 class MinMaxBot:
-    """Algorithme Min-Max avec Alpha-Beta Pruning"""
+    """Algorithme Min-Max avec Alpha-Beta Pruning et timeout"""
 
     def __init__(self, depth: int = 4):
         self.depth = depth
+        self.max_depth = 20  # Maximum depth for iterative deepening
         self.evaluator = Evaluator()
         self.nodes_explored = 0
+        self.timeout_reached = False
+        self.start_time = None
+        self.timeout_ms = 2000  # Default 2 seconds
+
+    def _minmax(self, state: GameState, depth: int, maximizing_player: bool, 
+                original_player: int, alpha: float, beta: float) -> float:
+        """
+        Internal MinMax with Alpha-Beta Pruning and timeout checking
+        """
+        # Check for timeout
+        if time.time() - self.start_time > self.timeout_ms / 1000.0:
+            self.timeout_reached = True
+            return 0
+        
+        self.nodes_explored += 1
+
+        # Terminal state or depth reached
+        if self.evaluator.is_terminal(state):
+            return self.evaluator.get_terminal_score(state, original_player)
+        
+        if depth == 0:
+            return self.evaluator.evaluate(state, original_player)
+
+        moves = MoveGenerator.get_all_moves(state, state.current_player)
+        
+        if not moves:
+            return self.evaluator.evaluate(state, original_player)
+
+        if maximizing_player:
+            max_eval = float('-inf')
+            for hole, color, transparent_as in moves:
+                new_state = MoveGenerator.apply_move(state, hole, color, transparent_as)
+                eval_score = self._minmax(new_state, depth - 1, False, original_player, alpha, beta)
+                
+                if self.timeout_reached:
+                    return 0
+                
+                max_eval = max(max_eval, eval_score)
+                alpha = max(alpha, max_eval)
+                if beta <= alpha:
+                    break  # Beta cutoff
+            return max_eval
+        else:
+            min_eval = float('inf')
+            for hole, color, transparent_as in moves:
+                new_state = MoveGenerator.apply_move(state, hole, color, transparent_as)
+                eval_score = self._minmax(new_state, depth - 1, True, original_player, alpha, beta)
+                
+                if self.timeout_reached:
+                    return 0
+                
+                min_eval = min(min_eval, eval_score)
+                beta = min(beta, min_eval)
+                if beta <= alpha:
+                    break  # Alpha cutoff
+            return min_eval
+
+    def find_best_move(self, state: GameState, player: int, timeout_ms: int = 2000) -> Optional[Tuple[int, Color, Color]]:
+        """
+        Find best move using iterative deepening with timeout
+        Only saves results from fully completed depths
+        """
+        moves = MoveGenerator.get_all_moves(state, player)
+        
+        if not moves:
+            return None
+        
+        # Start timing
+        self.start_time = time.time()
+        self.timeout_ms = timeout_ms
+        
+        # Best move from the last fully completed depth
+        best_move = moves[0]  # Default to first move
+        best_eval_completed = float('-inf')
+        
+        # Iterative deepening: search from depth 1 to max_depth
+        for current_depth in range(1, self.max_depth + 1):
+            self.timeout_reached = False
+            self.nodes_explored = 0
+            
+            best_move_this_depth = None
+            best_eval_this_depth = float('-inf')
+            alpha = float('-inf')
+            beta = float('inf')
+            
+            # Search all moves at current depth
+            for hole, color, transparent_as in moves:
+                # Check for timeout before each move
+                if time.time() - self.start_time > timeout_ms / 1000.0:
+                    self.timeout_reached = True
+                    break
+                
+                new_state = MoveGenerator.apply_move(state, hole, color, transparent_as)
+                eval_score = self._minmax(new_state, current_depth - 1, False, player, alpha, beta)
+                
+                if self.timeout_reached:
+                    break
+                
+                if eval_score > best_eval_this_depth:
+                    best_eval_this_depth = eval_score
+                    best_move_this_depth = (hole, color, transparent_as)
+                
+                alpha = max(alpha, best_eval_this_depth)
+            
+            # Only update best move if this depth completed fully
+            if not self.timeout_reached and best_move_this_depth is not None:
+                best_move = best_move_this_depth
+                best_eval_completed = best_eval_this_depth
+            else:
+                break  # Timeout reached, use previous depth's result
+        
+        return best_move
 
     def search(self, state: GameState, player: int, depth: int = 0,
                alpha: float = float('-inf'), beta: float = float('inf')) -> Tuple[float, Optional[Tuple[int, Color, Color]]]:
         """
-        Min-Max avec Alpha-Beta Pruning
+        Min-Max avec Alpha-Beta Pruning (legacy interface)
         """
         self.nodes_explored += 1
 

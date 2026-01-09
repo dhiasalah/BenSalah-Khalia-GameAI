@@ -14,6 +14,7 @@
 #include <sstream>
 #include <tuple>
 #include <optional>
+#include <chrono>
 
 // Structure pour représenter un coup parsé
 struct ParsedMove
@@ -96,7 +97,7 @@ int main(int argc, char *argv[])
     // Initialiser le jeu et le bot avec MinMax AI
     GameState state;
     GameEngine engine(&state); // Pass pointer to GameState
-    MinMaxBot bot(4);          // MinMax avec profondeur 4
+    MinMaxBot bot(1);          // Start with depth 1, will increase with iterative deepening
 
     std::string line;
 
@@ -139,8 +140,18 @@ int main(int argc, char *argv[])
         // S'assurer que le joueur courant est correct
         state.current_player = my_player;
 
-        // Obtenir le meilleur coup avec MinMax
-        Move best_move = bot.getMove(state, my_player);
+        // Use the new findBestMove with internal timeout checking
+        // This uses iterative deepening and only saves results from completed depths
+        auto start_time = std::chrono::steady_clock::now();
+
+        Move best_move = bot.findBestMove(state, my_player, std::chrono::milliseconds(2000));
+
+        // Print timing info to stderr (won't affect game protocol)
+        auto end_time = std::chrono::steady_clock::now();
+        long total_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        std::cerr << "[C++] Move time: " << total_time << "ms" << std::endl;
+
+        // best_move should have at least depth 1 result
 
         std::string my_move;
 

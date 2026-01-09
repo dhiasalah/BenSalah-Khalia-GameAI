@@ -17,12 +17,15 @@
 #include <queue>
 #include <limits>
 #include <cmath>
+#include <chrono>
 
-class Evaluator {
+class Evaluator
+{
 public:
     /**Évalue la qualité d'une position*/
 
-    static double evaluate(const GameState& state, int player) {
+    static double evaluate(const GameState &state, int player)
+    {
         /**
         Évalue une position pour un joueur
         Score positif = avantage pour le joueur
@@ -37,11 +40,13 @@ public:
         int player_seeds = 0;
         int opponent_seeds = 0;
 
-        for (int hole : state.getPlayerHoles(player)) {
+        for (int hole : state.getPlayerHoles(player))
+        {
             player_seeds += state.getTotalSeeds(hole);
         }
 
-        for (int hole : state.getPlayerHoles(opponent)) {
+        for (int hole : state.getPlayerHoles(opponent))
+        {
             opponent_seeds += state.getTotalSeeds(hole);
         }
 
@@ -50,26 +55,33 @@ public:
         return score;
     }
 
-    static bool isTerminal(const GameState& state) {
+    static bool isTerminal(const GameState &state)
+    {
         /**Vérifie si c'est un état terminal*/
         return state.isGameOver();
     }
 
-    static double getTerminalScore(const GameState& state, int player) {
+    static double getTerminalScore(const GameState &state, int player)
+    {
         /**Retourne le score d'un état terminal*/
-        if (state.captured_seeds.at(player) > state.captured_seeds.at(3 - player)) {
-            return std::numeric_limits<double>::infinity();  // Victoire
-        } else if (state.captured_seeds.at(player) < state.captured_seeds.at(3 - player)) {
-            return -std::numeric_limits<double>::infinity();  // Défaite
-        } else {
-            return 0.0;  // Égalité
+        if (state.captured_seeds.at(player) > state.captured_seeds.at(3 - player))
+        {
+            return std::numeric_limits<double>::infinity(); // Victoire
+        }
+        else if (state.captured_seeds.at(player) < state.captured_seeds.at(3 - player))
+        {
+            return -std::numeric_limits<double>::infinity(); // Défaite
+        }
+        else
+        {
+            return 0.0; // Égalité
         }
     }
 };
 
-
 // Structure pour représenter un coup
-struct Move {
+struct Move
+{
     int hole;
     Color color;
     Color transparent_as;
@@ -80,8 +92,8 @@ struct Move {
     Move(int h, Color c, Color t, bool ut) : hole(h), color(c), transparent_as(t), use_transparent(ut), valid(true) {}
 };
 
-
-class BFSBot {
+class BFSBot
+{
 public:
     /**Algorithme BFS pour explorer les états à profondeur égale*/
     int depth;
@@ -89,35 +101,41 @@ public:
 
     BFSBot(int d = 2) : depth(d) {}
 
-    Move search(const GameState& state, int player) {
+    Move search(const GameState &state, int player)
+    {
         /**
         Effectue une recherche BFS jusqu'à une profondeur donnée
         Retourne le meilleur coup
         */
-        if (evaluator.isTerminal(state)) {
+        if (evaluator.isTerminal(state))
+        {
             return Move();
         }
 
         // Queue: (state, depth, first_move)
-        struct QueueItem {
+        struct QueueItem
+        {
             GameState state;
             int depth;
             Move first_move;
         };
         std::queue<QueueItem> queue;
         queue.push({state, 0, Move()});
-        
+
         Move best_move;
         double best_score = -std::numeric_limits<double>::infinity();
 
-        while (!queue.empty()) {
+        while (!queue.empty())
+        {
             QueueItem item = queue.front();
             queue.pop();
 
             // Si on a atteint la profondeur désirée
-            if (item.depth == depth) {
+            if (item.depth == depth)
+            {
                 double score = evaluator.evaluate(item.state, player);
-                if (score > best_score && item.first_move.valid) {
+                if (score > best_score && item.first_move.valid)
+                {
                     best_score = score;
                     best_move = item.first_move;
                 }
@@ -125,10 +143,12 @@ public:
             }
 
             // Explorer les enfants
-            if (item.state.current_player == player) {
+            if (item.state.current_player == player)
+            {
                 auto next_moves = MoveGenerator::getAllMoves(item.state, player);
 
-                for (const auto& move : next_moves) {
+                for (const auto &move : next_moves)
+                {
                     int hole = std::get<0>(move);
                     Color color = std::get<1>(move);
                     Color trans_as = std::get<2>(move);
@@ -144,14 +164,15 @@ public:
         return best_move;
     }
 
-    Move getMove(const GameState& state, int player) {
+    Move getMove(const GameState &state, int player)
+    {
         /**Interface publique pour obtenir un coup*/
         return search(state, player);
     }
 };
 
-
-class DFSBot {
+class DFSBot
+{
 public:
     /**Algorithme DFS pour explorer les états en profondeur*/
     int depth;
@@ -159,37 +180,47 @@ public:
 
     DFSBot(int d = 3) : depth(d) {}
 
-    std::pair<double, Move> search(const GameState& state, int player, int current_depth = 0) {
+    std::pair<double, Move> search(const GameState &state, int player, int current_depth = 0)
+    {
         /**
         Effectue une recherche DFS
         Retourne (meilleur_score, meilleur_coup)
         */
         // État terminal
-        if (evaluator.isTerminal(state)) {
+        if (evaluator.isTerminal(state))
+        {
             int opponent = 3 - player;
-            if (state.captured_seeds.at(player) > state.captured_seeds.at(opponent)) {
+            if (state.captured_seeds.at(player) > state.captured_seeds.at(opponent))
+            {
                 return {std::numeric_limits<double>::infinity(), Move()};
-            } else if (state.captured_seeds.at(player) < state.captured_seeds.at(opponent)) {
+            }
+            else if (state.captured_seeds.at(player) < state.captured_seeds.at(opponent))
+            {
                 return {-std::numeric_limits<double>::infinity(), Move()};
-            } else {
+            }
+            else
+            {
                 return {0.0, Move()};
             }
         }
 
         // Profondeur atteinte
-        if (current_depth >= depth) {
+        if (current_depth >= depth)
+        {
             return {evaluator.evaluate(state, player), Move()};
         }
 
         double best_score;
         Move best_move;
 
-        if (state.current_player == player) {
+        if (state.current_player == player)
+        {
             // Joueur maximisant
             best_score = -std::numeric_limits<double>::infinity();
             auto moves = MoveGenerator::getAllMoves(state, player);
 
-            for (const auto& move : moves) {
+            for (const auto &move : moves)
+            {
                 int hole = std::get<0>(move);
                 Color color = std::get<1>(move);
                 Color trans_as = std::get<2>(move);
@@ -198,18 +229,22 @@ public:
                 GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
                 auto [score, _] = search(new_state, player, current_depth + 1);
 
-                if (score > best_score) {
+                if (score > best_score)
+                {
                     best_score = score;
                     best_move = Move(hole, color, trans_as, use_trans);
                 }
             }
-        } else {
+        }
+        else
+        {
             // Joueur minimisant
             int opponent = 3 - player;
             best_score = std::numeric_limits<double>::infinity();
             auto moves = MoveGenerator::getAllMoves(state, opponent);
 
-            for (const auto& move : moves) {
+            for (const auto &move : moves)
+            {
                 int hole = std::get<0>(move);
                 Color color = std::get<1>(move);
                 Color trans_as = std::get<2>(move);
@@ -218,7 +253,8 @@ public:
                 GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
                 auto [score, _] = search(new_state, player, current_depth + 1);
 
-                if (score < best_score) {
+                if (score < best_score)
+                {
                     best_score = score;
                     best_move = Move(hole, color, trans_as, use_trans);
                 }
@@ -228,49 +264,232 @@ public:
         return {best_score, best_move};
     }
 
-    Move getMove(const GameState& state, int player) {
+    Move getMove(const GameState &state, int player)
+    {
         /**Interface publique pour obtenir un coup*/
         auto [_, move] = search(state, player, 0);
         return move;
     }
 };
 
-
-class MinMaxBot {
+class MinMaxBot
+{
 public:
-    /**Algorithme Min-Max avec Alpha-Beta Pruning*/
+    /**Algorithme Min-Max avec Alpha-Beta Pruning et timeout*/
     int depth;
+    int max_depth;
     Evaluator evaluator;
     int nodes_explored;
+    bool timeout_reached;
+    std::chrono::steady_clock::time_point start_time;
+    std::chrono::milliseconds timeout_ms;
 
-    MinMaxBot(int d = 4) : depth(d), nodes_explored(0) {}
+    MinMaxBot(int d = 4) : depth(d), max_depth(20), nodes_explored(0), timeout_reached(false), timeout_ms(2000) {}
 
-    std::pair<double, Move> search(const GameState& state, int player, int current_depth = 0,
-                                    double alpha = -std::numeric_limits<double>::infinity(),
-                                    double beta = std::numeric_limits<double>::infinity()) {
+    double _minmax(const GameState &state, int current_depth, bool maximizing_player,
+                   int original_player, double alpha, double beta)
+    {
         /**
-        Min-Max avec Alpha-Beta Pruning
+        Internal MinMax with Alpha-Beta Pruning and timeout checking
+        */
+        // Check for timeout
+        auto now = std::chrono::steady_clock::now();
+        if (now - start_time > timeout_ms)
+        {
+            timeout_reached = true;
+            return 0;
+        }
+
+        nodes_explored++;
+
+        // Terminal state
+        if (evaluator.isTerminal(state))
+        {
+            return evaluator.getTerminalScore(state, original_player);
+        }
+
+        // Depth reached
+        if (current_depth == 0)
+        {
+            return evaluator.evaluate(state, original_player);
+        }
+
+        auto moves = MoveGenerator::getAllMoves(state, state.current_player);
+
+        if (moves.empty())
+        {
+            return evaluator.evaluate(state, original_player);
+        }
+
+        if (maximizing_player)
+        {
+            double max_eval = -std::numeric_limits<double>::infinity();
+            for (const auto &move : moves)
+            {
+                int hole = std::get<0>(move);
+                Color color = std::get<1>(move);
+                Color trans_as = std::get<2>(move);
+                bool use_trans = std::get<3>(move);
+
+                GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
+                double eval_score = _minmax(new_state, current_depth - 1, false, original_player, alpha, beta);
+
+                if (timeout_reached)
+                {
+                    return 0;
+                }
+
+                max_eval = std::max(max_eval, eval_score);
+                alpha = std::max(alpha, max_eval);
+                if (beta <= alpha)
+                {
+                    break; // Beta cutoff
+                }
+            }
+            return max_eval;
+        }
+        else
+        {
+            double min_eval = std::numeric_limits<double>::infinity();
+            for (const auto &move : moves)
+            {
+                int hole = std::get<0>(move);
+                Color color = std::get<1>(move);
+                Color trans_as = std::get<2>(move);
+                bool use_trans = std::get<3>(move);
+
+                GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
+                double eval_score = _minmax(new_state, current_depth - 1, true, original_player, alpha, beta);
+
+                if (timeout_reached)
+                {
+                    return 0;
+                }
+
+                min_eval = std::min(min_eval, eval_score);
+                beta = std::min(beta, min_eval);
+                if (beta <= alpha)
+                {
+                    break; // Alpha cutoff
+                }
+            }
+            return min_eval;
+        }
+    }
+
+    Move findBestMove(const GameState &state, int player, std::chrono::milliseconds timeout = std::chrono::milliseconds(2000))
+    {
+        /**
+        Find best move using iterative deepening with timeout
+        Only saves results from fully completed depths
+        */
+        auto moves = MoveGenerator::getAllMoves(state, player);
+
+        if (moves.empty())
+        {
+            return Move();
+        }
+
+        // Start timing
+        start_time = std::chrono::steady_clock::now();
+        timeout_ms = timeout;
+
+        // Best move from the last fully completed depth (default to first move)
+        auto first_move = moves[0];
+        Move best_move(std::get<0>(first_move), std::get<1>(first_move),
+                       std::get<2>(first_move), std::get<3>(first_move));
+        double best_eval_completed = -std::numeric_limits<double>::infinity();
+
+        // Iterative deepening: search from depth 1 to max_depth
+        for (int current_depth = 1; current_depth <= max_depth; current_depth++)
+        {
+            timeout_reached = false;
+            nodes_explored = 0;
+
+            Move best_move_this_depth;
+            double best_eval_this_depth = -std::numeric_limits<double>::infinity();
+            double alpha = -std::numeric_limits<double>::infinity();
+            double beta = std::numeric_limits<double>::infinity();
+
+            // Search all moves at current depth
+            for (const auto &move : moves)
+            {
+                // Check for timeout before each move
+                auto now = std::chrono::steady_clock::now();
+                if (now - start_time > timeout_ms)
+                {
+                    timeout_reached = true;
+                    break;
+                }
+
+                int hole = std::get<0>(move);
+                Color color = std::get<1>(move);
+                Color trans_as = std::get<2>(move);
+                bool use_trans = std::get<3>(move);
+
+                GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
+                double eval_score = _minmax(new_state, current_depth - 1, false, player, alpha, beta);
+
+                if (timeout_reached)
+                {
+                    break;
+                }
+
+                if (eval_score > best_eval_this_depth)
+                {
+                    best_eval_this_depth = eval_score;
+                    best_move_this_depth = Move(hole, color, trans_as, use_trans);
+                }
+
+                alpha = std::max(alpha, best_eval_this_depth);
+            }
+
+            // Only update best move if this depth completed fully
+            if (!timeout_reached && best_move_this_depth.valid)
+            {
+                best_move = best_move_this_depth;
+                best_eval_completed = best_eval_this_depth;
+            }
+            else
+            {
+                break; // Timeout reached, use previous depth's result
+            }
+        }
+
+        return best_move;
+    }
+
+    std::pair<double, Move> search(const GameState &state, int player, int current_depth = 0,
+                                   double alpha = -std::numeric_limits<double>::infinity(),
+                                   double beta = std::numeric_limits<double>::infinity())
+    {
+        /**
+        Min-Max avec Alpha-Beta Pruning (legacy interface)
         */
         nodes_explored++;
 
         // État terminal
-        if (evaluator.isTerminal(state)) {
+        if (evaluator.isTerminal(state))
+        {
             return {evaluator.getTerminalScore(state, player), Move()};
         }
 
         // Profondeur atteinte
-        if (current_depth >= depth) {
+        if (current_depth >= depth)
+        {
             return {evaluator.evaluate(state, player), Move()};
         }
 
-        if (state.current_player == player) {
+        if (state.current_player == player)
+        {
             // Nœud maximisant
             double max_eval = -std::numeric_limits<double>::infinity();
             Move best_move;
 
             auto moves = MoveGenerator::getAllMoves(state, player);
 
-            for (const auto& move : moves) {
+            for (const auto &move : moves)
+            {
                 int hole = std::get<0>(move);
                 Color color = std::get<1>(move);
                 Color trans_as = std::get<2>(move);
@@ -279,19 +498,23 @@ public:
                 GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
                 auto [eval_score, _] = search(new_state, player, current_depth + 1, alpha, beta);
 
-                if (eval_score > max_eval) {
+                if (eval_score > max_eval)
+                {
                     max_eval = eval_score;
                     best_move = Move(hole, color, trans_as, use_trans);
                 }
 
                 alpha = std::max(alpha, eval_score);
-                if (beta <= alpha) {
-                    break;  // Beta cutoff
+                if (beta <= alpha)
+                {
+                    break; // Beta cutoff
                 }
             }
 
             return {max_eval, best_move};
-        } else {
+        }
+        else
+        {
             // Nœud minimisant
             int opponent = 3 - player;
             double min_eval = std::numeric_limits<double>::infinity();
@@ -299,7 +522,8 @@ public:
 
             auto moves = MoveGenerator::getAllMoves(state, opponent);
 
-            for (const auto& move : moves) {
+            for (const auto &move : moves)
+            {
                 int hole = std::get<0>(move);
                 Color color = std::get<1>(move);
                 Color trans_as = std::get<2>(move);
@@ -308,14 +532,16 @@ public:
                 GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
                 auto [eval_score, _] = search(new_state, player, current_depth + 1, alpha, beta);
 
-                if (eval_score < min_eval) {
+                if (eval_score < min_eval)
+                {
                     min_eval = eval_score;
                     best_move = Move(hole, color, trans_as, use_trans);
                 }
 
                 beta = std::min(beta, eval_score);
-                if (beta <= alpha) {
-                    break;  // Alpha cutoff
+                if (beta <= alpha)
+                {
+                    break; // Alpha cutoff
                 }
             }
 
@@ -323,7 +549,8 @@ public:
         }
     }
 
-    Move getMove(const GameState& state, int player) {
+    Move getMove(const GameState &state, int player)
+    {
         /**Interface publique pour obtenir un coup*/
         nodes_explored = 0;
         auto [_, move] = search(state, player, 0);
@@ -331,8 +558,8 @@ public:
     }
 };
 
-
-class AlphaBetaBot {
+class AlphaBetaBot
+{
 public:
     /**Algorithme Alpha-Beta Pruning - Version optimisée de MinMax*/
     int depth;
@@ -342,10 +569,11 @@ public:
 
     AlphaBetaBot(int d = 5) : depth(d), nodes_explored(0), pruned_branches(0) {}
 
-    std::pair<double, Move> search(const GameState& state, int player, int current_depth = 0,
-                                    double alpha = -std::numeric_limits<double>::infinity(),
-                                    double beta = std::numeric_limits<double>::infinity(),
-                                    bool is_maximizing = true) {
+    std::pair<double, Move> search(const GameState &state, int player, int current_depth = 0,
+                                   double alpha = -std::numeric_limits<double>::infinity(),
+                                   double beta = std::numeric_limits<double>::infinity(),
+                                   bool is_maximizing = true)
+    {
         /**
         Alpha-Beta Pruning - Élagage des branches non prometteuses
 
@@ -355,26 +583,30 @@ public:
         nodes_explored++;
 
         // État terminal
-        if (evaluator.isTerminal(state)) {
+        if (evaluator.isTerminal(state))
+        {
             double terminal_score = evaluator.getTerminalScore(state, player);
             return {terminal_score, Move()};
         }
 
         // Profondeur atteinte
-        if (current_depth >= depth) {
+        if (current_depth >= depth)
+        {
             return {evaluator.evaluate(state, player), Move()};
         }
 
         int current_player = state.current_player;
 
-        if (is_maximizing) {
+        if (is_maximizing)
+        {
             // Nœud maximisant (notre joueur)
             double max_eval = -std::numeric_limits<double>::infinity();
             Move best_move;
 
             auto moves = MoveGenerator::getAllMoves(state, current_player);
 
-            for (const auto& move : moves) {
+            for (const auto &move : moves)
+            {
                 int hole = std::get<0>(move);
                 Color color = std::get<1>(move);
                 Color trans_as = std::get<2>(move);
@@ -387,7 +619,8 @@ public:
 
                 auto [eval_score, _] = search(new_state, player, current_depth + 1, alpha, beta, next_is_maximizing);
 
-                if (eval_score > max_eval) {
+                if (eval_score > max_eval)
+                {
                     max_eval = eval_score;
                     best_move = Move(hole, color, trans_as, use_trans);
                 }
@@ -396,21 +629,25 @@ public:
                 alpha = std::max(alpha, eval_score);
 
                 // Élagage Beta
-                if (beta <= alpha) {
+                if (beta <= alpha)
+                {
                     pruned_branches++;
-                    break;  // Beta cutoff - on peut arrêter d'explorer cette branche
+                    break; // Beta cutoff - on peut arrêter d'explorer cette branche
                 }
             }
 
             return {max_eval, best_move};
-        } else {
+        }
+        else
+        {
             // Nœud minimisant (adversaire)
             double min_eval = std::numeric_limits<double>::infinity();
             Move best_move;
 
             auto moves = MoveGenerator::getAllMoves(state, current_player);
 
-            for (const auto& move : moves) {
+            for (const auto &move : moves)
+            {
                 int hole = std::get<0>(move);
                 Color color = std::get<1>(move);
                 Color trans_as = std::get<2>(move);
@@ -423,7 +660,8 @@ public:
 
                 auto [eval_score, _] = search(new_state, player, current_depth + 1, alpha, beta, next_is_maximizing);
 
-                if (eval_score < min_eval) {
+                if (eval_score < min_eval)
+                {
                     min_eval = eval_score;
                     best_move = Move(hole, color, trans_as, use_trans);
                 }
@@ -432,9 +670,10 @@ public:
                 beta = std::min(beta, eval_score);
 
                 // Élagage Alpha
-                if (beta <= alpha) {
+                if (beta <= alpha)
+                {
                     pruned_branches++;
-                    break;  // Alpha cutoff - on peut arrêter d'explorer cette branche
+                    break; // Alpha cutoff - on peut arrêter d'explorer cette branche
                 }
             }
 
@@ -442,23 +681,24 @@ public:
         }
     }
 
-    Move getMove(const GameState& state, int player) {
+    Move getMove(const GameState &state, int player)
+    {
         /**Interface publique pour obtenir un coup*/
         nodes_explored = 0;
         pruned_branches = 0;
 
-        auto [_, move] = search(state, player, 0, -std::numeric_limits<double>::infinity(), 
-                                 std::numeric_limits<double>::infinity(), true);
+        auto [_, move] = search(state, player, 0, -std::numeric_limits<double>::infinity(),
+                                std::numeric_limits<double>::infinity(), true);
 
-        // std::cout << "[Alpha-Beta] Nœuds explorés: " << nodes_explored 
+        // std::cout << "[Alpha-Beta] Nœuds explorés: " << nodes_explored
         //           << ", Branches élaguées: " << pruned_branches << std::endl;
 
         return move;
     }
 };
 
-
-class IterativeDeepeningDFSBot {
+class IterativeDeepeningDFSBot
+{
 public:
     /**Algorithme Iterative Deepening DFS*/
     int max_depth;
@@ -467,31 +707,36 @@ public:
 
     IterativeDeepeningDFSBot(int d = 6) : max_depth(d), nodes_explored(0) {}
 
-    std::pair<double, Move> dfsLimited(const GameState& state, int player, int depth_limit, int current_depth = 0) {
+    std::pair<double, Move> dfsLimited(const GameState &state, int player, int depth_limit, int current_depth = 0)
+    {
         /**
         DFS avec limite de profondeur
         */
         nodes_explored++;
 
         // État terminal
-        if (evaluator.isTerminal(state)) {
+        if (evaluator.isTerminal(state))
+        {
             return {evaluator.getTerminalScore(state, player), Move()};
         }
 
         // Limite de profondeur atteinte
-        if (current_depth >= depth_limit) {
+        if (current_depth >= depth_limit)
+        {
             return {evaluator.evaluate(state, player), Move()};
         }
 
         double best_score;
         Move best_move;
 
-        if (state.current_player == player) {
+        if (state.current_player == player)
+        {
             // Maximisant
             best_score = -std::numeric_limits<double>::infinity();
             auto moves = MoveGenerator::getAllMoves(state, player);
 
-            for (const auto& move : moves) {
+            for (const auto &move : moves)
+            {
                 int hole = std::get<0>(move);
                 Color color = std::get<1>(move);
                 Color trans_as = std::get<2>(move);
@@ -500,18 +745,22 @@ public:
                 GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
                 auto [score, _] = dfsLimited(new_state, player, depth_limit, current_depth + 1);
 
-                if (score > best_score) {
+                if (score > best_score)
+                {
                     best_score = score;
                     best_move = Move(hole, color, trans_as, use_trans);
                 }
             }
-        } else {
+        }
+        else
+        {
             // Minimisant
             int opponent = 3 - player;
             best_score = std::numeric_limits<double>::infinity();
             auto moves = MoveGenerator::getAllMoves(state, opponent);
 
-            for (const auto& move : moves) {
+            for (const auto &move : moves)
+            {
                 int hole = std::get<0>(move);
                 Color color = std::get<1>(move);
                 Color trans_as = std::get<2>(move);
@@ -520,7 +769,8 @@ public:
                 GameState new_state = MoveGenerator::applyMove(state, hole, color, trans_as, use_trans);
                 auto [score, _] = dfsLimited(new_state, player, depth_limit, current_depth + 1);
 
-                if (score < best_score) {
+                if (score < best_score)
+                {
                     best_score = score;
                     best_move = Move(hole, color, trans_as, use_trans);
                 }
@@ -530,17 +780,20 @@ public:
         return {best_score, best_move};
     }
 
-    Move search(const GameState& state, int player) {
+    Move search(const GameState &state, int player)
+    {
         /**
         Iterative Deepening: augmente progressivement la profondeur
         */
         Move best_move;
 
-        for (int d = 1; d <= max_depth; d++) {
+        for (int d = 1; d <= max_depth; d++)
+        {
             nodes_explored = 0;
             auto [_, move] = dfsLimited(state, player, d);
 
-            if (move.valid) {
+            if (move.valid)
+            {
                 best_move = move;
                 // std::cout << "[ID-DFS] Profondeur " << d << ": " << nodes_explored << " nœuds explorés" << std::endl;
             }
@@ -549,7 +802,8 @@ public:
         return best_move;
     }
 
-    Move getMove(const GameState& state, int player) {
+    Move getMove(const GameState &state, int player)
+    {
         /**Interface publique pour obtenir un coup*/
         return search(state, player);
     }
