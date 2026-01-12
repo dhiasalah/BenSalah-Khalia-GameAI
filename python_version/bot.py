@@ -20,21 +20,39 @@ def main():
     Fonction principale pour interfacer avec awale-arena
     Lire depuis stdin, traiter les mouvements, envoyer les réponses
     """
-    # Récupérer le numéro du joueur (1 ou 2)
-    my_player = int(sys.argv[1])  # 1 ou 2
+    # Récupérer le numéro du joueur (JoueurA ou JoueurB)
+    my_player = 1 if sys.argv[1] == "JoueurA" else 2
 
     # Initialiser le jeu et le bot avec MinMax AI
     state = GameState()
     engine = GameEngine(state)
     bot = MinMaxBot(depth=1)  # Start with depth 1, will increase with iterative deepening
+    move_count = 0  # Track number of moves
+    last_move = ""  # Track the last move played
+
+    def check_game_over():
+        """Check if game is over and return result string if so"""
+        score_j1 = state.captured_seeds[1]
+        score_j2 = state.captured_seeds[2]
+        
+        # Check if someone won (49 or more seeds)
+        if score_j1 >= 49 or score_j2 >= 49:
+            return f"RESULT {last_move} {score_j1} {score_j2}"
+        
+        # Check move limit
+        if move_count >= 400:
+            return f"RESULT LIMIT {score_j1} {score_j2}"
+        
+        # Check if less than 10 seeds remain on board
+        total_on_board = sum(sum(state.holes[i].values()) for i in range(1, 17))
+        if total_on_board < 10:
+            return f"RESULT {last_move} {score_j1} {score_j2}"
+        
+        return None
 
     # Boucle principale
     for line in sys.stdin:
         move_str = line.strip()
-
-        # Traiter les signaux spéciaux
-        if move_str == "END":
-            break
 
         # Pour Player 2, attendre le premier coup de Player 1
         if move_str == "START" and my_player == 2:
@@ -45,6 +63,15 @@ def main():
             hole, color, trans_as = parse_move(move_str)
             if hole and color:
                 engine.play_move(hole, color, trans_as)
+                move_count += 1  # Opponent's move
+                last_move = move_str  # Track opponent's last move
+            
+            # Check if game ended after opponent's move
+            result = check_game_over()
+            if result:
+                print(result)
+                sys.stdout.flush()
+                break
 
         # S'assurer que le joueur courant est correct
         state.current_player = my_player
@@ -53,7 +80,7 @@ def main():
         # This uses iterative deepening and only saves results from completed depths
         start_time = time.time()
         
-        best_move = bot.find_best_move(state, my_player, timeout_ms=2950)
+        best_move = bot.find_best_move(state, my_player, timeout_ms=2850)
         
         # Print timing info to stderr (won't affect game protocol)
         total_time = time.time() - start_time
@@ -66,13 +93,26 @@ def main():
             
             # Appliquer notre coup
             engine.play_move(hole, color, trans_as)
+            move_count += 1  # Our move
+            last_move = my_move  # Track our last move
+            
+            # Envoyer le coup à la plateforme
+            sys.stdout.write(my_move + "\n")
+            sys.stdout.flush()
+            
+            # Check if game ended after our move
+            result = check_game_over()
+            if result:
+                print(result)
+                sys.stdout.flush()
+                break
         else:
-            # Pas de coup disponible (ne devrait pas arriver)
-            my_move = "NOMOVE"
-
-        # Envoyer le coup à la plateforme
-        sys.stdout.write(my_move + "\n")
-        sys.stdout.flush()
+            # Pas de coup disponible - game over
+            score_j1 = state.captured_seeds[1]
+            score_j2 = state.captured_seeds[2]
+            print(f"RESULT {last_move} {score_j1} {score_j2}")
+            sys.stdout.flush()
+            break
 
 
 def iterative_deepening_search(bot, state, player, time_limit=2.0):

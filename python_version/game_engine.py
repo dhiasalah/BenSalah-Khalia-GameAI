@@ -229,28 +229,33 @@ class GameEngine:
         return str(self.state)
 
 
+# Pre-computed player holes for speed
+_P1_HOLES = (1, 3, 5, 7, 9, 11, 13, 15)
+_P2_HOLES = (2, 4, 6, 8, 10, 12, 14, 16)
+
+
 class MoveGenerator:
-    """Générateur de mouvements pour l'IA"""
+    """Générateur de mouvements pour l'IA - Optimized"""
 
     @staticmethod
     def get_all_moves(state: GameState, player: int) -> List[Tuple[int, Color, Color]]:
         """
-        Génère tous les coups possibles pour un joueur
+        Génère tous les coups possibles pour un joueur - Optimized
         Inclut les graines RED, BLUE et TRANSPARENT (comme transparentRED et transparentBLUE)
-
-        Retourne: (hole, color_to_play, transparent_as_color)
-        transparent_as_color est None pour RED/BLUE, RED ou BLUE pour TRANSPARENT
         """
         moves = []
+        holes = state.holes
+        player_holes = _P1_HOLES if player == 1 else _P2_HOLES
 
-        for hole in state.get_player_holes(player):
+        for hole in player_holes:
+            h = holes[hole]
             # Générer les coups pour les couleurs ROUGE et BLEU
-            if state.holes[hole][Color.RED] > 0:
+            if h[Color.RED] > 0:
                 moves.append((hole, Color.RED, None))
-            if state.holes[hole][Color.BLUE] > 0:
+            if h[Color.BLUE] > 0:
                 moves.append((hole, Color.BLUE, None))
             # Générer les coups pour TRANSPARENT (comme RED ou comme BLUE)
-            if state.holes[hole][Color.TRANSPARENT] > 0:
+            if h[Color.TRANSPARENT] > 0:
                 moves.append((hole, Color.TRANSPARENT, Color.RED))
                 moves.append((hole, Color.TRANSPARENT, Color.BLUE))
 
@@ -259,7 +264,7 @@ class MoveGenerator:
     @staticmethod
     def apply_move(state: GameState, hole: int, color: Color, transparent_as: Color = None) -> GameState:
         """
-        Applique un coup à un état et retourne le nouvel état
+        Applique un coup à un état et retourne le nouvel état - Optimized
         """
         new_state = state.copy()
         engine = GameEngine(new_state)

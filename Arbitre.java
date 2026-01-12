@@ -7,11 +7,11 @@ public class Arbitre {
     private static final int MAX_MOVES = 400;
 
     public static void main(String[] args) throws Exception {
-        // Process A: Python bot with MinMax AI (Player 1 - odd holes)
-        Process A = Runtime.getRuntime().exec("python python_version\\bot.py 1");
+        // Process A: Friend's bot (Player 1 - odd holes)
+        Process A = Runtime.getRuntime().exec(new String[]{"bot_v2.exe", "JoueurA"});
         
-        // Process B: C++ bot with MinMax AI (Player 2 - even holes)
-        Process B = Runtime.getRuntime().exec("c_version\\bot.exe 2");
+        // Process B: Your bot (Player 2 - even holes)
+        Process B = Runtime.getRuntime().exec(new String[]{"c_version\\bot.exe", "JoueurB"});
 
         Joueur joueur1 = new Joueur("Player1", A, 1);
         Joueur joueur2 = new Joueur("Player2", B, 2);
@@ -30,12 +30,15 @@ public class Arbitre {
         int nbCoups = 0;
         
         System.out.println("=== DEBUT DE LA PARTIE ===");
-        System.out.println("Player1 (Python MinMax) vs Player2 (C++ MinMax)");
+        System.out.println("Player1 (Friend's bot) vs Player2 (Your bot)");
         System.out.println();
 
         while (!game.isGameOver() && nbCoups < MAX_MOVES) {
             // Demander le coup au joueur courant
+            long startTime = System.currentTimeMillis();
             String coup = courant.response(TIMEOUT_SECONDS);
+            long endTime = System.currentTimeMillis();
+            long elapsedTime = endTime - startTime;
             
             if (coup == null) {
                 disqualifier(courant, autre, game, "timeout");
@@ -44,14 +47,21 @@ public class Arbitre {
 
             coup = coup.trim();
             
-            // Vérifier si le joueur n'a pas de coup valide
-            if (coup.equals("NOMOVE") || coup.equals("PASS")) {
-                // Le joueur n'a plus de coups valides - fin de partie
-                System.out.println(courant.nom + " -> " + coup + " (pas de coup disponible)");
+            // Vérifier si le bot envoie RESULT (fin de partie détectée par le bot)
+            if (coup.startsWith("RESULT")) {
+                System.out.println(courant.nom + " -> " + coup + " [" + elapsedTime + "ms]");
+                System.out.println("\n=== FIN DE LA PARTIE ===");
                 break;
             }
             
-            System.out.println(courant.nom + " -> " + coup);
+            // Vérifier si le joueur n'a pas de coup valide
+            if (coup.equals("NOMOVE") || coup.equals("PASS")) {
+                // Le joueur n'a plus de coups valides - fin de partie
+                System.out.println(courant.nom + " -> " + coup + " (pas de coup disponible) [" + elapsedTime + "ms]");
+                break;
+            }
+            
+            System.out.println(courant.nom + " -> " + coup + " [" + elapsedTime + "ms]");
             
             // Validation et application du coup
             if (!game.applyMove(coup, courant.playerNum)) {
@@ -75,25 +85,23 @@ public class Arbitre {
             autre = tmp;
         }
         
-        // Afficher le résultat
-        System.out.println();
-        System.out.println("=== FIN DE LA PARTIE ===");
+        // Afficher le résultat final
+        System.out.println("\n=== RESULTAT FINAL ===");
         System.out.println("Coups joués: " + nbCoups);
         System.out.println("Score Player1: " + game.capturedSeeds[1]);
         System.out.println("Score Player2: " + game.capturedSeeds[2]);
         
         int winner = game.getWinner();
         if (winner == 1) {
-            System.out.println("RESULT Player1  WINS!");
+            System.out.println("Gagnant: Player1");
         } else if (winner == 2) {
-            System.out.println("RESULT Player2  WINS!");
+            System.out.println("Gagnant: Player2");
         } else {
-            System.out.println("RESULT DRAW!");
+            System.out.println("Match nul");
         }
         
         joueur1.destroy();
         joueur2.destroy();
-        System.out.println("Fin.");
     }
 
     private static void disqualifier(Joueur fautif, Joueur autre, GameState game, String raison) {

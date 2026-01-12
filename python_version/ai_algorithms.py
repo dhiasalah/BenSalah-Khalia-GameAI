@@ -13,8 +13,12 @@ from collections import deque
 import sys
 import time
 
+# Pre-computed infinity values (avoid repeated float() calls)
+INF = float('inf')
+NEG_INF = float('-inf')
+
 class Evaluator:
-    """Évalue la qualité d'une position"""
+    """Évalue la qualité d'une position - Optimized"""
 
     @staticmethod
     def evaluate(state: GameState, player: int) -> float:
@@ -24,23 +28,35 @@ class Evaluator:
         Score négatif = avantage pour l'adversaire
         """
         opponent = 3 - player
+        captured = state.captured_seeds
+        holes = state.holes
 
         # Différence de graines capturées
-        score = (state.captured_seeds[player] - state.captured_seeds[opponent]) * 10
+        score = (captured[player] - captured[opponent]) * 10
 
-        # Bonus pour les graines sur le plateau
+        # Bonus pour les graines sur le plateau (inlined for speed)
         player_seeds = 0
         opponent_seeds = 0
-
-        for hole in state.get_player_holes(player):
-            player_seeds += state.get_total_seeds(hole)
-
-        for hole in state.get_player_holes(opponent):
-            opponent_seeds += state.get_total_seeds(hole)
+        
+        # Player 1 = odd holes, Player 2 = even holes
+        if player == 1:
+            for h in (1, 3, 5, 7, 9, 11, 13, 15):
+                hd = holes[h]
+                player_seeds += hd[Color.RED] + hd[Color.BLUE] + hd[Color.TRANSPARENT]
+            for h in (2, 4, 6, 8, 10, 12, 14, 16):
+                hd = holes[h]
+                opponent_seeds += hd[Color.RED] + hd[Color.BLUE] + hd[Color.TRANSPARENT]
+        else:
+            for h in (2, 4, 6, 8, 10, 12, 14, 16):
+                hd = holes[h]
+                player_seeds += hd[Color.RED] + hd[Color.BLUE] + hd[Color.TRANSPARENT]
+            for h in (1, 3, 5, 7, 9, 11, 13, 15):
+                hd = holes[h]
+                opponent_seeds += hd[Color.RED] + hd[Color.BLUE] + hd[Color.TRANSPARENT]
 
         score += (player_seeds - opponent_seeds) * 2
 
-        return float(score)
+        return score
 
     @staticmethod
     def is_terminal(state: GameState) -> bool:
@@ -50,13 +66,13 @@ class Evaluator:
     @staticmethod
     def get_terminal_score(state: GameState, player: int) -> float:
         """Retourne le score d'un état terminal"""
-        if state.captured_seeds[player] > state.captured_seeds[3 - player]:
-            return float('inf')  # Victoire
-        elif state.captured_seeds[player] < state.captured_seeds[3 - player]:
-            return float('-inf')  # Défaite
+        cp, co = state.captured_seeds[player], state.captured_seeds[3 - player]
+        if cp > co:
+            return INF  # Victoire
+        elif cp < co:
+            return NEG_INF  # Défaite
         else:
             return 0.0  # Égalité
-
 
 class BFSBot:
     """Algorithme BFS pour explorer les états à profondeur égale"""
@@ -169,43 +185,52 @@ class DFSBot:
 
 
 class MinMaxBot:
-    """Algorithme Min-Max avec Alpha-Beta Pruning et timeout"""
+    """Algorithme Min-Max avec Alpha-Beta Pruning et timeout - Optimized"""
+
+    __slots__ = ['depth', 'max_depth', 'nodes_explored', 'timeout_reached', 'start_time', 'timeout_ms', 'timeout_sec', 'check_interval']
 
     def __init__(self, depth: int = 4):
         self.depth = depth
         self.max_depth = 20  # Maximum depth for iterative deepening
-        self.evaluator = Evaluator()
         self.nodes_explored = 0
         self.timeout_reached = False
         self.start_time = None
         self.timeout_ms = 2000  # Default 2 seconds
+        self.timeout_sec = 2.0
+        self.check_interval = 500  # Check timeout every N nodes
 
     def _minmax(self, state: GameState, depth: int, maximizing_player: bool, 
                 original_player: int, alpha: float, beta: float) -> float:
         """
-        Internal MinMax with Alpha-Beta Pruning and timeout checking
+        Internal MinMax with Alpha-Beta Pruning and timeout checking - Optimized
         """
-        # Check for timeout
-        if time.time() - self.start_time > self.timeout_ms / 1000.0:
-            self.timeout_reached = True
-            return 0
-        
         self.nodes_explored += 1
+        
+        # Check for timeout less frequently (every N nodes)
+        if self.nodes_explored % self.check_interval == 0:
+            if time.time() - self.start_time > self.timeout_sec:
+                self.timeout_reached = True
+                return 0
 
-        # Terminal state or depth reached
-        if self.evaluator.is_terminal(state):
-            return self.evaluator.get_terminal_score(state, original_player)
+        # Terminal state check (inlined)
+        if state.is_game_over():
+            cp, co = state.captured_seeds[original_player], state.captured_seeds[3 - original_player]
+            if cp > co:
+                return INF
+            elif cp < co:
+                return NEG_INF
+            return 0.0
         
         if depth == 0:
-            return self.evaluator.evaluate(state, original_player)
+            return Evaluator.evaluate(state, original_player)
 
         moves = MoveGenerator.get_all_moves(state, state.current_player)
         
         if not moves:
-            return self.evaluator.evaluate(state, original_player)
+            return Evaluator.evaluate(state, original_player)
 
         if maximizing_player:
-            max_eval = float('-inf')
+            max_eval = NEG_INF
             for hole, color, transparent_as in moves:
                 new_state = MoveGenerator.apply_move(state, hole, color, transparent_as)
                 eval_score = self._minmax(new_state, depth - 1, False, original_player, alpha, beta)
@@ -213,13 +238,15 @@ class MinMaxBot:
                 if self.timeout_reached:
                     return 0
                 
-                max_eval = max(max_eval, eval_score)
-                alpha = max(alpha, max_eval)
+                if eval_score > max_eval:
+                    max_eval = eval_score
+                if max_eval > alpha:
+                    alpha = max_eval
                 if beta <= alpha:
                     break  # Beta cutoff
             return max_eval
         else:
-            min_eval = float('inf')
+            min_eval = INF
             for hole, color, transparent_as in moves:
                 new_state = MoveGenerator.apply_move(state, hole, color, transparent_as)
                 eval_score = self._minmax(new_state, depth - 1, True, original_player, alpha, beta)
@@ -227,15 +254,17 @@ class MinMaxBot:
                 if self.timeout_reached:
                     return 0
                 
-                min_eval = min(min_eval, eval_score)
-                beta = min(beta, min_eval)
+                if eval_score < min_eval:
+                    min_eval = eval_score
+                if min_eval < beta:
+                    beta = min_eval
                 if beta <= alpha:
                     break  # Alpha cutoff
             return min_eval
 
     def find_best_move(self, state: GameState, player: int, timeout_ms: int = 2000) -> Optional[Tuple[int, Color, Color]]:
         """
-        Find best move using iterative deepening with timeout
+        Find best move using iterative deepening with timeout - Optimized
         Only saves results from fully completed depths
         """
         moves = MoveGenerator.get_all_moves(state, player)
@@ -246,10 +275,10 @@ class MinMaxBot:
         # Start timing
         self.start_time = time.time()
         self.timeout_ms = timeout_ms
+        self.timeout_sec = timeout_ms / 1000.0
         
         # Best move from the last fully completed depth
         best_move = moves[0]  # Default to first move
-        best_eval_completed = float('-inf')
         
         # Iterative deepening: search from depth 1 to max_depth
         for current_depth in range(1, self.max_depth + 1):
@@ -257,14 +286,14 @@ class MinMaxBot:
             self.nodes_explored = 0
             
             best_move_this_depth = None
-            best_eval_this_depth = float('-inf')
-            alpha = float('-inf')
-            beta = float('inf')
+            best_eval_this_depth = NEG_INF
+            alpha = NEG_INF
+            beta = INF
             
             # Search all moves at current depth
             for hole, color, transparent_as in moves:
                 # Check for timeout before each move
-                if time.time() - self.start_time > timeout_ms / 1000.0:
+                if time.time() - self.start_time > self.timeout_sec:
                     self.timeout_reached = True
                     break
                 
@@ -278,12 +307,12 @@ class MinMaxBot:
                     best_eval_this_depth = eval_score
                     best_move_this_depth = (hole, color, transparent_as)
                 
-                alpha = max(alpha, best_eval_this_depth)
+                if best_eval_this_depth > alpha:
+                    alpha = best_eval_this_depth
             
             # Only update best move if this depth completed fully
             if not self.timeout_reached and best_move_this_depth is not None:
                 best_move = best_move_this_depth
-                best_eval_completed = best_eval_this_depth
             else:
                 break  # Timeout reached, use previous depth's result
         

@@ -16,9 +16,15 @@ class Color(Enum):
     BLUE = "B"
     TRANSPARENT = "T"
 
-class GameState:
-    """État du jeu"""
+# Pre-computed player holes (avoid repeated list creation)
+_PLAYER1_HOLES = (1, 3, 5, 7, 9, 11, 13, 15)
+_PLAYER2_HOLES = (2, 4, 6, 8, 10, 12, 14, 16)
 
+class GameState:
+    """État du jeu - Optimized version"""
+
+    __slots__ = ['holes', 'captured_seeds', 'current_player', 'move_count']
+    
     MAX_MOVES = 400  # Limite de 400 coups (200 par joueur)
 
     def __init__(self):
@@ -38,17 +44,15 @@ class GameState:
                 Color.TRANSPARENT: 2
             }
 
-    def get_player_holes(self, player: int) -> List[int]:
+    def get_player_holes(self, player: int) -> Tuple[int, ...]:
         """Retourne les trous contrôlés par un joueur
         Joueur 1: trous impairs, Joueur 2: trous pairs"""
-        if player == 1:
-            return [h for h in range(1, 17) if h % 2 == 1]
-        else:
-            return [h for h in range(1, 17) if h % 2 == 0]
+        return _PLAYER1_HOLES if player == 1 else _PLAYER2_HOLES
 
     def get_total_seeds(self, hole: int) -> int:
         """Retourne le nombre total de graines dans un trou"""
-        return sum(self.holes[hole].values())
+        h = self.holes[hole]
+        return h[Color.RED] + h[Color.BLUE] + h[Color.TRANSPARENT]
 
     def get_seeds_on_board(self) -> int:
         """Retourne le nombre total de graines sur le plateau"""
@@ -66,21 +70,21 @@ class GameState:
         - 400 coups atteints -> fin (celui avec le plus de graines gagne)
         """
         # Condition 0: Limite de 400 coups atteinte
-        if self.move_count >= self.MAX_MOVES:
+        if self.move_count >= 400:
             return True
 
-        seeds_on_board = self.get_seeds_on_board()
-
-        # Condition 1: Moins de 10 graines sur le plateau
-        if seeds_on_board < 10:
-            return True
+        c1, c2 = self.captured_seeds[1], self.captured_seeds[2]
 
         # Condition 2: Un joueur a capturé 49+ graines (victoire)
-        if self.captured_seeds[1] >= 49 or self.captured_seeds[2] >= 49:
+        if c1 >= 49 or c2 >= 49:
             return True
 
         # Condition 3: Les deux joueurs ont capturé 40+ graines (égalité)
-        if self.captured_seeds[1] >= 40 and self.captured_seeds[2] >= 40:
+        if c1 >= 40 and c2 >= 40:
+            return True
+
+        # Condition 1: Moins de 10 graines sur le plateau (fast calc)
+        if 96 - c1 - c2 < 10:
             return True
 
         return False
@@ -122,11 +126,10 @@ class GameState:
         return valid_moves
 
     def copy(self) -> 'GameState':
-        """Crée une copie de l'état du jeu"""
-        new_state = GameState()
-        for hole in range(1, 17):
-            new_state.holes[hole] = self.holes[hole].copy()
-        new_state.captured_seeds = self.captured_seeds.copy()
+        """Crée une copie de l'état du jeu - Optimized"""
+        new_state = object.__new__(GameState)
+        new_state.holes = {h: self.holes[h].copy() for h in range(1, 17)}
+        new_state.captured_seeds = {1: self.captured_seeds[1], 2: self.captured_seeds[2]}
         new_state.current_player = self.current_player
         new_state.move_count = self.move_count
         return new_state

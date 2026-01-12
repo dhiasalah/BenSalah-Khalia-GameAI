@@ -22,32 +22,38 @@
 class Evaluator
 {
 public:
-    /**Évalue la qualité d'une position*/
+    /**Évalue la qualité d'une position - Optimized*/
 
     static double evaluate(const GameState &state, int player)
     {
         /**
-        Évalue une position pour un joueur
+        Évalue une position pour un joueur - Optimized
         Score positif = avantage pour le joueur
-        Score négatif = avantage pour l'adversaire
         */
         int opponent = 3 - player;
+        const auto &captured = state.captured_seeds;
+        const auto &holes = state.holes;
 
         // Différence de graines capturées
-        double score = (state.captured_seeds.at(player) - state.captured_seeds.at(opponent)) * 10.0;
+        double score = (captured.at(player) - captured.at(opponent)) * 10.0;
 
-        // Bonus pour les graines sur le plateau
+        // Bonus pour les graines sur le plateau (inlined for speed)
         int player_seeds = 0;
         int opponent_seeds = 0;
 
-        for (int hole : state.getPlayerHoles(player))
+        const int *p_holes = (player == 1) ? PLAYER1_HOLES : PLAYER2_HOLES;
+        const int *o_holes = (player == 1) ? PLAYER2_HOLES : PLAYER1_HOLES;
+
+        for (int i = 0; i < 8; i++)
         {
-            player_seeds += state.getTotalSeeds(hole);
+            const auto &h = holes.at(p_holes[i]);
+            player_seeds += h.at(Color::RED) + h.at(Color::BLUE) + h.at(Color::TRANSPARENT);
         }
 
-        for (int hole : state.getPlayerHoles(opponent))
+        for (int i = 0; i < 8; i++)
         {
-            opponent_seeds += state.getTotalSeeds(hole);
+            const auto &h = holes.at(o_holes[i]);
+            opponent_seeds += h.at(Color::RED) + h.at(Color::BLUE) + h.at(Color::TRANSPARENT);
         }
 
         score += (player_seeds - opponent_seeds) * 2.0;
@@ -63,12 +69,14 @@ public:
 
     static double getTerminalScore(const GameState &state, int player)
     {
-        /**Retourne le score d'un état terminal*/
-        if (state.captured_seeds.at(player) > state.captured_seeds.at(3 - player))
+        /**Retourne le score d'un état terminal - Optimized*/
+        int cp = state.captured_seeds.at(player);
+        int co = state.captured_seeds.at(3 - player);
+        if (cp > co)
         {
             return std::numeric_limits<double>::infinity(); // Victoire
         }
-        else if (state.captured_seeds.at(player) < state.captured_seeds.at(3 - player))
+        else if (cp < co)
         {
             return -std::numeric_limits<double>::infinity(); // Défaite
         }
@@ -283,6 +291,7 @@ public:
     bool timeout_reached;
     std::chrono::steady_clock::time_point start_time;
     std::chrono::milliseconds timeout_ms;
+    static constexpr int CHECK_INTERVAL = 500; // Check timeout every N nodes
 
     MinMaxBot(int d = 4) : depth(d), max_depth(20), nodes_explored(0), timeout_reached(false), timeout_ms(2000) {}
 
@@ -292,15 +301,18 @@ public:
         /**
         Internal MinMax with Alpha-Beta Pruning and timeout checking
         */
-        // Check for timeout
-        auto now = std::chrono::steady_clock::now();
-        if (now - start_time > timeout_ms)
-        {
-            timeout_reached = true;
-            return 0;
-        }
-
         nodes_explored++;
+
+        // Check for timeout less frequently (every N nodes)
+        if (nodes_explored % CHECK_INTERVAL == 0)
+        {
+            auto now = std::chrono::steady_clock::now();
+            if (now - start_time > timeout_ms)
+            {
+                timeout_reached = true;
+                return 0;
+            }
+        }
 
         // Terminal state
         if (evaluator.isTerminal(state))

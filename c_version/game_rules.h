@@ -37,6 +37,10 @@ inline std::string colorToString(Color c)
     return "";
 }
 
+// Pre-computed player holes for speed
+const int PLAYER1_HOLES[8] = {1, 3, 5, 7, 9, 11, 13, 15};
+const int PLAYER2_HOLES[8] = {2, 4, 6, 8, 10, 12, 14, 16};
+
 class GameState
 {
 public:
@@ -66,40 +70,31 @@ public:
         }
     }
 
+    const int *getPlayerHolesPtr(int player) const
+    {
+        /**Retourne pointeur vers les trous du joueur (pour performance)*/
+        return (player == 1) ? PLAYER1_HOLES : PLAYER2_HOLES;
+    }
+
     std::vector<int> getPlayerHoles(int player) const
     {
         /**Retourne les trous contrôlés par un joueur
         Joueur 1: trous impairs, Joueur 2: trous pairs*/
-        std::vector<int> result;
         if (player == 1)
         {
-            for (int h = 1; h <= 16; h += 2)
-            {
-                result.push_back(h);
-            }
+            return std::vector<int>(PLAYER1_HOLES, PLAYER1_HOLES + 8);
         }
         else
         {
-            for (int h = 2; h <= 16; h += 2)
-            {
-                result.push_back(h);
-            }
+            return std::vector<int>(PLAYER2_HOLES, PLAYER2_HOLES + 8);
         }
-        return result;
     }
 
     int getTotalSeeds(int hole) const
     {
-        /**Retourne le nombre total de graines dans un trou*/
-        auto it = holes.find(hole);
-        if (it == holes.end())
-            return 0;
-        int total = 0;
-        for (const auto &pair : it->second)
-        {
-            total += pair.second;
-        }
-        return total;
+        /**Retourne le nombre total de graines dans un trou - Optimized*/
+        const auto &h = holes.at(hole);
+        return h.at(Color::RED) + h.at(Color::BLUE) + h.at(Color::TRANSPARENT);
     }
 
     int getSeedsOnBoard() const
@@ -119,34 +114,31 @@ public:
     bool isGameOver() const
     {
         /**
-        Vérifie si le jeu est terminé selon les règles:
-        - Un joueur a capturé 49+ graines -> victoire
-        - Les deux joueurs ont capturé 40+ graines -> égalité
-        - Strictement moins de 10 graines restent sur le plateau -> fin
-        - 400 coups atteints -> fin (celui avec le plus de graines gagne)
+        Vérifie si le jeu est terminé selon les règles - Optimized
         */
         // Condition 0: Limite de 400 coups atteinte
-        if (move_count >= MAX_MOVES)
+        if (move_count >= 400)
         {
             return true;
         }
 
-        int seeds_on_board = getSeedsOnBoard();
-
-        // Condition 1: Moins de 10 graines sur le plateau
-        if (seeds_on_board < 10)
-        {
-            return true;
-        }
+        int c1 = captured_seeds.at(1);
+        int c2 = captured_seeds.at(2);
 
         // Condition 2: Un joueur a capturé 49+ graines (victoire)
-        if (captured_seeds.at(1) >= 49 || captured_seeds.at(2) >= 49)
+        if (c1 >= 49 || c2 >= 49)
         {
             return true;
         }
 
         // Condition 3: Les deux joueurs ont capturé 40+ graines (égalité)
-        if (captured_seeds.at(1) >= 40 && captured_seeds.at(2) >= 40)
+        if (c1 >= 40 && c2 >= 40)
+        {
+            return true;
+        }
+
+        // Condition 1: Moins de 10 graines sur le plateau (fast calc)
+        if (96 - c1 - c2 < 10)
         {
             return true;
         }

@@ -92,14 +92,48 @@ int main(int argc, char *argv[])
     }
 
     // Récupérer le numéro du joueur (1 ou 2)
-    int my_player = std::stoi(argv[1]);
+    int my_player = (std::string(argv[1]) == "JoueurA") ? 1 : 2;
 
     // Initialiser le jeu et le bot avec MinMax AI
     GameState state;
     GameEngine engine(&state); // Pass pointer to GameState
     MinMaxBot bot(1);          // Start with depth 1, will increase with iterative deepening
+    int move_count = 0;        // Track number of moves
+    std::string last_move;     // Track the last move played
 
     std::string line;
+
+    // Lambda to check if game is over
+    auto check_game_over = [&]() -> std::string
+    {
+        int score_j1 = state.captured_seeds[1];
+        int score_j2 = state.captured_seeds[2];
+
+        // Check if someone won (49 or more seeds)
+        if (score_j1 >= 49 || score_j2 >= 49)
+        {
+            return "RESULT " + last_move + " " + std::to_string(score_j1) + " " + std::to_string(score_j2);
+        }
+
+        // Check move limit
+        if (move_count >= 400)
+        {
+            return "RESULT LIMIT " + std::to_string(score_j1) + " " + std::to_string(score_j2);
+        }
+
+        // Check if less than 10 seeds remain on board
+        int total_on_board = 0;
+        for (int i = 1; i <= 16; i++)
+        {
+            total_on_board += state.holes[i][Color::RED] + state.holes[i][Color::BLUE] + state.holes[i][Color::TRANSPARENT];
+        }
+        if (total_on_board < 10)
+        {
+            return "RESULT " + last_move + " " + std::to_string(score_j1) + " " + std::to_string(score_j2);
+        }
+
+        return "";
+    };
 
     // Boucle principale
     while (std::getline(std::cin, line))
@@ -107,12 +141,6 @@ int main(int argc, char *argv[])
         // Enlever les espaces blancs
         line.erase(0, line.find_first_not_of(" \t\r\n"));
         line.erase(line.find_last_not_of(" \t\r\n") + 1);
-
-        // Traiter les signaux spéciaux
-        if (line == "END")
-        {
-            break;
-        }
 
         // Pour Player 2, on doit d'abord recevoir le coup de Player 1
         if (line == "START" && my_player == 2)
@@ -134,6 +162,16 @@ int main(int argc, char *argv[])
                 {
                     engine.playMove(parsed.hole, parsed.color, Color::RED, false);
                 }
+                move_count++;     // Opponent's move
+                last_move = line; // Track opponent's last move
+
+                // Check if game ended after opponent's move
+                std::string result = check_game_over();
+                if (!result.empty())
+                {
+                    std::cout << result << std::endl;
+                    break;
+                }
             }
         }
 
@@ -144,7 +182,7 @@ int main(int argc, char *argv[])
         // This uses iterative deepening and only saves results from completed depths
         auto start_time = std::chrono::steady_clock::now();
 
-        Move best_move = bot.findBestMove(state, my_player, std::chrono::milliseconds(2950));
+        Move best_move = bot.findBestMove(state, my_player, std::chrono::milliseconds(2900));
 
         // Print timing info to stderr (won't affect game protocol)
         auto end_time = std::chrono::steady_clock::now();
@@ -163,16 +201,29 @@ int main(int argc, char *argv[])
             // Appliquer notre coup
             engine.playMove(best_move.hole, best_move.color,
                             best_move.transparent_as, best_move.use_transparent);
+            move_count++;        // Our move
+            last_move = my_move; // Track our last move
+
+            // Envoyer le coup à la plateforme
+            std::cout << my_move << std::endl;
+            std::cout.flush();
+
+            // Check if game ended after our move
+            std::string result = check_game_over();
+            if (!result.empty())
+            {
+                std::cout << result << std::endl;
+                break;
+            }
         }
         else
         {
-            // Pas de coup disponible (ne devrait pas arriver)
-            my_move = "NOMOVE";
+            // Pas de coup disponible - game over
+            int score_j1 = state.captured_seeds[1];
+            int score_j2 = state.captured_seeds[2];
+            std::cout << "RESULT " << last_move << " " << score_j1 << " " << score_j2 << std::endl;
+            break;
         }
-
-        // Envoyer le coup à la plateforme
-        std::cout << my_move << std::endl;
-        std::cout.flush();
     }
 
     return 0;
