@@ -8,10 +8,10 @@ public class Arbitre {
 
     public static void main(String[] args) throws Exception {
         // Process A: Ikram's bot (Player 1 - odd holes)
-        Process A = Runtime.getRuntime().exec(new String[]{"ikram.exe", "JoueurA"});
+        Process A = Runtime.getRuntime().exec(new String[]{"kacem.exe", "JoueurA"});
         
         // Process B: Your bot (Player 2 - even holes)
-        Process B = Runtime.getRuntime().exec(new String[]{"c_version\\bot.exe", "JoueurB"});
+        Process B = Runtime.getRuntime().exec(new String[]{"c_version\\BenSalah-Khalia-GameAI.exe", "JoueurB"});
 
         Joueur joueur1 = new Joueur("Ikram Bot", A, 1);
         Joueur joueur2 = new Joueur("Your Bot", B, 2);
