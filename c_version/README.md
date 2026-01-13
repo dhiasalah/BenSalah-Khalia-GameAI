@@ -2,69 +2,63 @@
 
 ## Compilation
 
-### C++ Bot
+### 1. Compiler le bot C++
 
-Compilez le bot C++ avec g++:
+Compilez votre bot C++ avec g++:
 
 ```bash
 cd c_version
-g++ -o build/bot.exe bot.cpp -std=c++17 -O2
+g++ -o bot.exe bot.cpp -std=c++17 -O2
 ```
 
-### Java Arbitre
+### 2. Compiler l'arbitre Java
 
 Compilez les fichiers Java:
 
 ```bash
+cd ..
 javac Arbitre.java
-javac JoueurExterne.java
 ```
 
-### Main Game (Optional)
+## Test et Exécution
 
-Pour compiler le jeu principal avec g++ (MinGW sur Windows ou GCC sur Linux/Mac):
+### Tester votre bot
 
-```bash
-cd c_version
-g++ -std=c++17 -O2 -o mancala main.cpp
-```
-
-## Exécution
-
-### Lancer une partie avec l'arbitre
+Lancez une partie avec l'arbitre:
 
 ```bash
 java Arbitre
 ```
 
-L'arbitre lancera automatiquement les deux bots et gérera la partie.
+L'arbitre lancera automatiquement les deux bots configurés et gérera la partie.
 
 ### Configuration des bots
 
-Dans `Arbitre.java`, les bots sont configurés ainsi:
+Dans `Arbitre.java` (lignes 10-15), les bots sont configurés ainsi:
 
-- Joueur A: `c_version\bot.exe` (votre bot C++)
-- Joueur B: `kacem.exe` (bot adverse)
+```java
+Process A = Runtime.getRuntime().exec(new String[]{"ikram.exe", "JoueurA"});
+Process B = Runtime.getRuntime().exec(new String[]{"c_version\\bot.exe", "JoueurB"});
+```
 
 #### Comment changer les joueurs
 
-Pour jouer contre un autre bot, modifiez les lignes 11-12 dans `Arbitre.java`:
+Pour jouer contre un autre bot, modifiez les lignes dans `Arbitre.java`:
 
 ```java
-// Ligne 11: Joueur 1 (trous impairs)
-Process A = Runtime.getRuntime().exec(new String[]{"c_version\\bot.exe", "JoueurA"});
+// Joueur 1 (trous impairs 1,3,5,7,9,11,13,15)
+Process A = Runtime.getRuntime().exec(new String[]{"bot1.exe", "JoueurA"});
 
-// Ligne 12: Joueur 2 (trous pairs)
-Process B = Runtime.getRuntime().exec(new String[]{"kacem.exe", "JoueurB"});
+// Joueur 2 (trous pairs 2,4,6,8,10,12,14,16)
+Process B = Runtime.getRuntime().exec(new String[]{"bot2.exe", "JoueurB"});
 ```
 
-Exemples de configuration:
+Exemples:
 
-- **Bot C++ vs Bot Kacem**: `{"c_version\\bot.exe", "JoueurA"}` vs `{"kacem.exe", "JoueurB"}`
-- **Bot C++ vs autre bot**: `{"c_version\\bot.exe", "JoueurA"}` vs `{"chemin\\vers\\autre_bot.exe", "JoueurB"}`
-- **Deux bots différents**: Remplacez les chemins par ceux de vos bots
+- **Votre bot vs Ikram**: `{"c_version\\bot.exe", "JoueurA"}` vs `{"ikram.exe", "JoueurB"}`
+- **Votre bot vs Kacem**: `{"c_version\\bot.exe", "JoueurA"}` vs `{"kacem.exe", "JoueurB"}`
 
-**Note**: Les bots doivent accepter un argument (JoueurA ou JoueurB) et suivre le protocole de communication de l'arbitre.
+**Important**: Les bots doivent accepter un argument (JoueurA ou JoueurB) et suivre le protocole de l'arbitre.
 
 ## Structure des fichiers
 
