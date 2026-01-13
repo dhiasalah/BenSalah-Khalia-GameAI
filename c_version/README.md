@@ -8,7 +8,7 @@ Compilez votre bot C++ avec g++:
 
 ```bash
 cd c_version
-g++ -o bot.exe bot.cpp -std=c++17 -O2
+g++ -o BenSalah-Khalia-GameAI.exe bot.cpp -std=c++17 -O2
 ```
 
 ### 2. Compiler l'arbitre Java
@@ -38,7 +38,7 @@ Dans `Arbitre.java` (lignes 10-15), les bots sont configurés ainsi:
 
 ```java
 Process A = Runtime.getRuntime().exec(new String[]{"ikram.exe", "JoueurA"});
-Process B = Runtime.getRuntime().exec(new String[]{"c_version\\bot.exe", "JoueurB"});
+Process B = Runtime.getRuntime().exec(new String[]{"c_version\\BenSalah-Khalia-GameAI.exe", "JoueurB"});
 ```
 
 #### Comment changer les joueurs
@@ -55,8 +55,8 @@ Process B = Runtime.getRuntime().exec(new String[]{"bot2.exe", "JoueurB"});
 
 Exemples:
 
-- **Votre bot vs Ikram**: `{"c_version\\bot.exe", "JoueurA"}` vs `{"ikram.exe", "JoueurB"}`
-- **Votre bot vs Kacem**: `{"c_version\\bot.exe", "JoueurA"}` vs `{"kacem.exe", "JoueurB"}`
+- **Votre bot vs Ikram**: `{"c_version\\BenSalah-Khalia-GameAI.exe", "JoueurA"}` vs `{"ikram.exe", "JoueurB"}`
+- **Votre bot vs Kacem**: `{"c_version\\BenSalah-Khalia-GameAI.exe", "JoueurA"}` vs `{"kacem.exe", "JoueurB"}`
 
 **Important**: Les bots doivent accepter un argument (JoueurA ou JoueurB) et suivre le protocole de l'arbitre.
 
