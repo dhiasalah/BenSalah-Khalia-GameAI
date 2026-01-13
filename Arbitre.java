@@ -7,14 +7,14 @@ public class Arbitre {
     private static final int MAX_MOVES = 400;
 
     public static void main(String[] args) throws Exception {
-        // Process A: Friend's bot (Player 1 - odd holes)
-        Process A = Runtime.getRuntime().exec(new String[]{"bot_v2.exe", "JoueurA"});
+        // Process A: Your bot (Player 1 - odd holes)
+        Process A = Runtime.getRuntime().exec(new String[]{"c_version\\bot.exe", "JoueurA"});
         
-        // Process B: Your bot (Player 2 - even holes)
-        Process B = Runtime.getRuntime().exec(new String[]{"c_version\\bot.exe", "JoueurB"});
+        // Process B: Marouane's bot (Player 2 - even holes)
+        Process B = Runtime.getRuntime().exec(new String[]{"kacem.exe", "JoueurB"});
 
-        Joueur joueur1 = new Joueur("Player1", A, 1);
-        Joueur joueur2 = new Joueur("Player2", B, 2);
+        Joueur joueur1 = new Joueur("Your Bot", A, 1);
+        Joueur joueur2 = new Joueur("Marouane Bot", B, 2);
  
         // Initialiser le jeu
         GameState game = new GameState();
@@ -30,7 +30,7 @@ public class Arbitre {
         int nbCoups = 0;
         
         System.out.println("=== DEBUT DE LA PARTIE ===");
-        System.out.println("Player1 (Friend's bot) vs Player2 (Your bot)");
+        System.out.println("Your Bot vs Marouane Bot");
         System.out.println();
 
         while (!game.isGameOver() && nbCoups < MAX_MOVES) {
@@ -83,14 +83,14 @@ public class Arbitre {
         // Afficher le résultat final
         System.out.println("\n=== RESULTAT FINAL ===");
         System.out.println("Coups joués: " + nbCoups);
-        System.out.println("Score Player1: " + game.capturedSeeds[1]);
-        System.out.println("Score Player2: " + game.capturedSeeds[2]);
+        System.out.println("Score Your Bot: " + game.capturedSeeds[1]);
+        System.out.println("Score Marouane Bot: " + game.capturedSeeds[2]);
         
         int winner = game.getWinner();
         if (winner == 1) {
-            System.out.println("Gagnant: Player1");
+            System.out.println("Gagnant: Your Bot");
         } else if (winner == 2) {
-            System.out.println("Gagnant: Player2");
+            System.out.println("Gagnant: Marouane Bot");
         } else {
             System.out.println("Match nul");
         }
